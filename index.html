@@ -182,7 +182,7 @@ h1,h2,h3{letter-spacing:-0.025em}
     <div class="methodology" id="methodology"></div>
     <div class="results-footer">
       <div>IFS Copperleaf readiness assessment</div>
-      <div id="ver">v1.2</div>
+      <div id="ver">v1.3</div>
     </div>
   </div>
 </section>
@@ -190,32 +190,50 @@ h1,h2,h3{letter-spacing:-0.025em}
 <script>
 'use strict';
 let CAPTURE_DISABLED=false;
-const APP_VERSION='v1.2';
+const APP_VERSION='v1.3';
 
 /* =========================================================
    Sector definitions
    ========================================================= */
 const SECTORS = {
+  elec_na: {
+    label: 'Electric utility (North America)', regulator: 'your public utility commission',
+    frame: 'rate case review, prudency and rate base treatment',
+    method: 'North American rate case practice, including prudency and used-and-useful standards',
+    resultNote: 'Under rate-of-return regulation, capital earns a return only after prudency and used-and-useful review. Quantified risk, documented alternatives and consistent business cases are exactly what commissions and intervenors test, and what the upper levels of this scale describe.'
+  },
+  gas_na: {
+    label: 'Gas utility (North America)', regulator: 'your public utility commission',
+    frame: 'rate case review, prudency and pipeline safety investment scrutiny',
+    method: 'North American rate case practice, including prudency review and pipeline replacement program oversight',
+    resultNote: 'Rate case prudency review, together with pipeline replacement and safety programs, rewards utilities that can quantify risk, defend intervention timing and show documented alternatives, which is what the upper levels of this scale describe.'
+  },
+  water_na: {
+    label: 'Water and wastewater (North America)', regulator: 'your commission and primacy agency',
+    frame: 'rate case review and consent decree or capital program scrutiny',
+    method: 'North American rate case practice and regulatory capital program oversight',
+    resultNote: 'Commissions, primacy agencies and consent decree obligations all reward the same behaviours: quantified risk, whole-life cost comparisons and investment decisions that can be defended line by line, which is what the upper levels of this scale describe.'
+  },
   elec: {
-    label: 'Electricity transmission and distribution', regulator: 'Ofgem',
+    label: 'Electricity transmission and distribution (UK)', regulator: 'Ofgem',
     frame: 'the RIIO-3 price control and the Totex Incentive Mechanism',
     method: 'the RIIO framework and CNAIM monetised network risk',
     resultNote: 'Under RIIO-3, totex incentives and CNAIM-based monetised risk reporting reward exactly the behaviours the upper levels of this scale describe: quantified probability and consequence of failure, whole-life trade-offs and a defensible line from spend to network risk and consumer value.'
   },
   gas: {
-    label: 'Gas transmission and distribution', regulator: 'Ofgem',
+    label: 'Gas transmission and distribution (UK)', regulator: 'Ofgem',
     frame: 'the RIIO-3 price control and Network Output Measures',
     method: 'the RIIO framework and Network Output Measures (NOMs)',
     resultNote: 'Under RIIO-3, NOMs reporting and long-term uncertainty over the asset base, including net-zero and stranded-asset risk, put a premium on quantified risk, adaptive planning and decisions that can be defended years after they were made.'
   },
   water: {
-    label: 'Water and wastewater', regulator: 'Ofwat',
+    label: 'Water and wastewater (UK)', regulator: 'Ofwat',
     frame: 'PR24 / AMP8 totex and outcome delivery incentives',
     method: 'the PR24 framework and the 25-year Long-Term Delivery Strategy',
     resultNote: 'PR24 totex and outcome delivery incentives, together with the 25-year Long-Term Delivery Strategy and its adaptive pathways, reward organisations that can quantify risk and value, optimise across AMP boundaries and evidence every choice in the plan.'
   },
   transport: {
-    label: 'Transport (rail and road)', regulator: 'the ORR',
+    label: 'Transport (rail and road, UK)', regulator: 'the ORR',
     frame: 'PR23 / Control Period 7 and the whole-life-cost framework',
     method: "the ORR's PR23 / CP7 framework, including whole-life cost and the Composite Sustainability Index",
     resultNote: 'PR23 and Control Period 7 place whole-life cost and the Composite Sustainability Index at the centre of the settlement, and the renewals-versus-repair trade-off is exactly where quantified risk and lifecycle value pay back first.'
