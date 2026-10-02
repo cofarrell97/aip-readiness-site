@@ -635,7 +635,7 @@ function drawRadar(scores) {
     const rr = r * v / 5;
     return [cx + rr * Math.cos(angle(i)), cy + rr * Math.sin(angle(i))];
   };
-  let svg = '<svg viewBox="0 0 ' + size + ' ' + size + '" width="100%" role="img" aria-label="Radar chart of maturity level per domain" xmlns="http://www.w3.org/2000/svg">';
+  let svg = '<svg viewBox="-50 -10 ' + (size + 100) + ' ' + (size + 20) + '" width="100%" role="img" aria-label="Radar chart of maturity level per domain" xmlns="http://www.w3.org/2000/svg">';
   for (let ring = 1; ring <= 5; ring++) {
     const pts = [];
     for (let i = 0; i < n; i++) pts.push(pt(i, ring).join(','));
