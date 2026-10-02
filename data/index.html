@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Data readiness assessment — IFS Copperleaf</title>
+<style>
+:root{
+  --ifs-midnight:#170430;--ifs-dark-purple:#360065;--ifs-lilac:#CD92FF;--ifs-purple:#8427E2;
+  --ifs-blue:#72C9F8;--ifs-green:#33FF94;--ifs-fuchsia:#E00072;--ifs-grey-2:#919BA5;
+  --ifs-grey-3:#C8D2D7;--ifs-grey-4:#E1EBEB;
+  --ifs-font:'Euclid Circular A','Century Gothic',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--ifs-font);background:#fff;color:#232323;letter-spacing:-0.01em;min-height:100vh}
+h1,h2,h3{letter-spacing:-0.025em}
+.screen{display:none}
+.screen.active{display:block}
+.shell{max-width:780px;margin:0 auto;padding:44px 22px 70px}
+.progress-wrap{position:sticky;top:0;z-index:10;height:5px;background:var(--ifs-grey-4)}
+.progress-bar{height:100%;width:0;background:var(--ifs-purple);transition:width .25s}
+.hero{background:radial-gradient(ellipse at 80% 20%,#8427E2 0%,transparent 50%),radial-gradient(ellipse at 20% 80%,#360065 0%,#170430 70%);color:#fff;border-radius:16px;padding:42px 40px}
+@media(max-width:560px){.hero{padding:30px 22px}}
+.eyebrow{font-size:12px;letter-spacing:.045em;text-transform:uppercase;font-weight:600;color:var(--ifs-lilac);margin-bottom:14px}
+.hero h1{font-size:clamp(25px,4.4vw,38px);font-weight:600;line-height:1.16}
+.grad{background:linear-gradient(90deg,#8427E2 50%,#CD92FF 75%,#72C9F8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--ifs-grey-3);margin-top:15px;font-size:15px;line-height:1.62;max-width:620px}
+.meta{display:flex;gap:34px;margin:26px 0 28px;flex-wrap:wrap}
+.meta div{font-size:13px;color:var(--ifs-grey-3)}
+.meta span{display:block;font-size:24px;font-weight:600;color:#fff}
+.ifs-btn{background:var(--ifs-blue);color:var(--ifs-midnight);border-radius:999px;padding:13px 30px;font-family:var(--ifs-font);font-weight:600;border:none;cursor:pointer;font-size:15px}
+.ifs-btn:hover{background:#8fd6ff}
+.privacy{font-size:11.5px;color:rgba(255,255,255,.55);margin-top:20px;line-height:1.5;max-width:620px}
+.q-domain{font-size:12px;letter-spacing:.045em;text-transform:uppercase;font-weight:600;color:var(--ifs-purple);margin-bottom:10px}
+.q-stem{font-size:clamp(20px,3vw,24px);font-weight:600;color:var(--ifs-dark-purple);margin-bottom:26px;line-height:1.26}
+.pcount{font-size:12.5px;color:var(--ifs-grey-2);margin-bottom:26px}
+.option{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--ifs-grey-3);border-radius:10px;padding:15px 18px;margin-bottom:11px;font-family:var(--ifs-font);font-size:14.5px;line-height:1.55;color:#333;cursor:pointer;transition:border-color .15s,background .15s}
+.option:hover{border-color:var(--ifs-purple)}
+.option.selected{border-color:var(--ifs-purple);background:#f4ebfd}
+.btn-back{background:none;border:none;color:var(--ifs-grey-2);text-decoration:underline;cursor:pointer;font-family:var(--ifs-font);font-size:13px;padding:10px 4px}
+.results-shell{max-width:820px;margin:0 auto;padding:44px 22px 60px}
+.results-hero h1{font-size:clamp(30px,4vw,40px);color:var(--ifs-dark-purple)}
+.level-name{font-weight:600;color:var(--ifs-purple);font-size:18px;margin:4px 0 12px}
+.results-hero p{font-size:14.5px;line-height:1.62;color:#4a4a4a;max-width:780px}
+.domain-card{background:#fff;border:1px solid var(--ifs-grey-3);border-radius:10px;padding:16px 18px;margin-bottom:12px}
+.dc-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}
+.domain-card h3{font-size:14.5px;font-weight:600;color:var(--ifs-dark-purple)}
+.dc-level{font-size:12px;font-weight:600;color:var(--ifs-purple);white-space:nowrap}
+.dc-track{height:7px;background:var(--ifs-grey-4);border-radius:999px;overflow:hidden}
+.dc-fill{height:100%;background:var(--ifs-purple);border-radius:999px}
+.results-cta{background:var(--ifs-midnight);color:#fff;border-radius:12px;padding:26px 28px;margin-top:30px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.results-cta p{font-size:14px;line-height:1.6;color:var(--ifs-grey-4);flex:1;min-width:260px}
+.methodology{font-size:11.5px;color:var(--ifs-grey-2);line-height:1.55;margin-top:26px}
+.results-footer{display:flex;justify-content:space-between;margin-top:30px;font-size:11.5px;color:var(--ifs-grey-2)}
+@media print{
+ @page{margin:14mm}
+ .progress-wrap,.results-cta,.noprint{display:none!important}
+ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .results-shell{padding:0;max-width:100%}
+ .results-hero h1{font-size:26px}
+ .results-hero p{font-size:12px;line-height:1.5}
+ .domain-card{break-inside:avoid;border-color:#bbb;padding:9px 14px;margin-bottom:7px}
+ .domain-card h3{font-size:12px}
+ .methodology{font-size:9px}
+}
+</style>
+</head>
+<body>
+
+<!-- Netlify Forms static registration (hidden). Field names must match the JS submission. -->
+<form name="data-assessment" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="text" name="bot-field">
+  <input type="text" name="token">
+  <input type="text" name="owner">
+  <input type="text" name="overallData">
+  <input type="text" name="dataDomainLevels">
+  <input type="text" name="dataAnswers">
+  <input type="text" name="startedAt">
+  <input type="text" name="durationSec">
+  <input type="text" name="dataAppVersion">
+</form>
+
+<div class="progress-wrap" id="progressWrap" hidden><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- ============ LANDING ============ -->
+<section class="screen active" id="screen-landing">
+  <div class="shell">
+    <div class="hero">
+      <div class="eyebrow">IFS Copperleaf</div>
+      <h1>How ready is your <span class="grad">data</span> to support value-based planning?</h1>
+      <p>A short follow-up to your readiness assessment, focused on the data behind investment decisions: ownership, coverage, condition, cost and integration. It is anchored to ISO 55013, the standard for managing data as an asset.</p>
+      <p>Same rules as before: there are no right answers, and no preparation is needed. Pick the description that matches how things actually work today, not the ambition.</p>
+      <div class="meta">
+        <div><span>10</span>questions</div>
+        <div><span>3 to 4</span>minutes</div>
+        <div><span>5</span>data domains</div>
+      </div>
+      <button class="ifs-btn" onclick="begin()">Begin the data assessment</button>
+      <p class="privacy">Your results are shared with your IFS Copperleaf team so your next session can be built around them.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QUESTION ============ -->
+<section class="screen" id="screen-question">
+  <div class="shell">
+    <div class="pcount" id="qCount"></div>
+    <div class="q-domain" id="qDomain"></div>
+    <h2 class="q-stem" id="qStem"></h2>
+    <div id="qOptions"></div>
+    <button class="btn-back" onclick="goBack()">Back</button>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section class="screen" id="screen-results">
+  <div class="results-shell">
+    <div class="results-hero">
+      <div class="eyebrow">Your data readiness result</div>
+      <h1 id="rOverall"></h1>
+      <div class="level-name" id="rLevelName"></div>
+      <p id="rLevelDesc"></p>
+    </div>
+    <h3 style="font-size:15px;color:var(--ifs-dark-purple);margin:28px 0 12px">Readiness by data domain</h3>
+    <div id="domainCards"></div>
+    <div class="results-cta noprint">
+      <p>Your IFS Copperleaf contact will bring these results together with your readiness assessment, so the next session reflects where your organisation actually is.</p>
+      <button class="ifs-btn" onclick="window.print()">Save as PDF</button>
+    </div>
+    <p class="methodology">Methodology. This screen extends the AIP readiness assessment into the data domain, anchored to ISO 55013 guidance on the management of data assets in support of ISO 55001. It is an indicative self-assessment based on self-reported behaviours, not a data audit, and results should be read as a starting point for discussion.</p>
+    <div class="results-footer">
+      <div>IFS Copperleaf data readiness assessment</div>
+      <div id="ver">d1.0</div>
+    </div>
+  </div>
+</section>
+
+<script>
+'use strict';
+let CAPTURE_DISABLED = false;
+const DAPP_VERSION = 'd1.0';
+
+const LEVELS = [
+  { n: 1, name: 'Reactive' },
+  { n: 2, name: 'Aware' },
+  { n: 3, name: 'Defined' },
+  { n: 4, name: 'Optimised' },
+  { n: 5, name: 'Adaptive' }
+];
+
+const DDOMAINS = [
+  { key: 'own', name: 'Data governance and ownership' },
+  { key: 'reg', name: 'Asset register coverage and quality' },
+  { key: 'cond', name: 'Condition and failure data' },
+  { key: 'cost', name: 'Cost and resource data' },
+  { key: 'integ', name: 'Integration and accessibility' }
+];
+
+const DQUESTIONS = [
+  { d: 0, stem: 'Who owns the data your investment decisions depend on?',
+    opts: [
+      'No one, formally. It lives with whoever built the spreadsheet.',
+      'Informal owners exist for some datasets, but accountability is unclear and unenforced.',
+      'Named owners are in place for core asset data, with defined responsibilities.',
+      'Owners work to defined quality targets, and performance against them is measured.',
+      'Data is managed as a corporate asset in its own right, with investment in data justified and prioritised like any other asset.'
+    ]},
+  { d: 0, stem: 'When poor data quality blocks or distorts a decision, what happens?',
+    opts: [
+      'We work around it with judgement and move on.',
+      'Someone fixes the immediate problem; the underlying issue usually remains.',
+      'Issues are logged against the owning team and systematically worked down.',
+      'Quality is measured against defined rules, and decisions record the confidence of the data behind them.',
+      'Data improvement is prioritised by decision value: the datasets that drive the biggest decisions get fixed first.'
+    ]},
+  { d: 1, stem: 'How complete is your asset register for the classes that drive capital spend?',
+    opts: [
+      'Materially incomplete or out of date for several major classes.',
+      'Good in places, patchy in others; completeness is not measured.',
+      'Core asset classes are complete, with the key characteristics planning needs.',
+      'Complete with measured accuracy, refreshed on a defined cycle.',
+      'Near-current and field-verified, with extended characteristics supporting predictive models.'
+    ]},
+  { d: 1, stem: 'Pick a single asset at random. How much would you trust its recorded age, type and criticality?',
+    opts: [
+      'Not much, without checking with the engineer who knows it.',
+      'The basics are probably right; anything beyond that is uncertain.',
+      'Trustworthy for major asset classes, with known gaps documented.',
+      'Trustworthy across the register, because accuracy is sampled and measured.',
+      'Fully, and discrepancies found in the field are corrected through a defined feedback loop.'
+    ]},
+  { d: 2, stem: 'What condition data exists for your critical asset classes?',
+    opts: [
+      'Little beyond age and anecdote.',
+      'Inspection records exist but are inconsistent in format and coverage.',
+      'Structured condition assessments for critical classes, on a defined cycle.',
+      'Condition scores or health indices maintained across most classes, refreshed as inspections land.',
+      'Continuous or sensor-derived condition data where it pays, feeding degradation and failure models.'
+    ]},
+  { d: 2, stem: 'How are asset failures and defects captured?',
+    opts: [
+      'In free text, or not at all.',
+      'Recorded in the work system, but not in a form you can analyse.',
+      'Coded consistently for major classes, so failure history can be queried.',
+      'Failure modes and causes recorded systematically, supporting probability-of-failure estimates.',
+      'A curated failure history across the asset base, calibrating risk models that planning actually uses.'
+    ]},
+  { d: 3, stem: 'How do you attach costs to a proposed intervention?',
+    opts: [
+      'Fresh estimates each time, built by whoever writes the case.',
+      'Reference costs exist informally; consistency depends on the estimator.',
+      'Standard unit costs for common interventions, reviewed periodically.',
+      'A maintained unit cost library with defined build-ups, used across all cases.',
+      'Unit costs calibrated against actuals from delivered work, with variance fed back into the library.'
+    ]},
+  { d: 3, stem: 'Can you compare what an investment actually cost against what was forecast?',
+    opts: [
+      'Rarely. Actuals and forecasts live in different worlds.',
+      'For big projects, with manual effort after the fact.',
+      'Actuals are tracked against forecast for major investments as routine.',
+      'Forecast, commitment and actuals are connected through delivery, with variances explained.',
+      'Outturn feeds back automatically into estimating and value models, closing the loop.'
+    ]},
+  { d: 4, stem: 'How does data from your asset, GIS and finance systems come together for planning?',
+    opts: [
+      'By hand, in spreadsheets, every time.',
+      'Periodic extracts stitched together by a small number of people who know how.',
+      'Defined interfaces or a reporting layer combine the core systems for planning purposes.',
+      'Integrated and reconciled data flows, refreshed on a schedule planning can rely on.',
+      'A governed data platform: planning consumes current, consistent data without manual assembly.'
+    ]},
+  { d: 4, stem: 'How long does it take to assemble the data for a planning cycle or a regulatory submission?',
+    opts: [
+      'Months, and the answer is stale before it is used.',
+      'Weeks of concentrated manual effort.',
+      'Days, following a defined and repeatable process.',
+      'Hours, mostly automated, with manual effort only on exceptions.',
+      'It is continuously available; a submission is a snapshot, not a project.'
+    ]}
+];
+
+/* prospect-facing implication per overall level */
+const DIMPLICATION = [
+  '',
+  'At this level the practical starting point is a focused data foundation: clear ownership, a trusted register for the asset classes that drive spend, and consistent failure capture. Value-based planning can still begin alongside that work, using the datasets you trust most first.',
+  'Your data can support value-based planning for priority asset classes now, while coverage and consistency are built out in parallel. The most valuable early move is usually choosing which asset classes to model first based on where the data is strongest.',
+  'Your data supports quantified, risk-based planning today: structured condition data and coded failure history are exactly what asset risk models consume. The next step is usually extending that discipline across more of the asset base and connecting cost outturn back into estimates.',
+  'Your data is ahead of most organisations: measured quality and integrated flows mean effort can go into value modelling and optimisation rather than data repair.',
+  'Data at this level makes advanced practice immediately available: predictive analytics, continuously calibrated risk models, and portfolio-wide views that are current rather than assembled. The focus becomes sustaining calibration and proving realised value.'
+];
+
+const state = {
+  answers: new Array(DQUESTIONS.length).fill(null),
+  qi: 0,
+  token: new URLSearchParams(location.search).get('p') || 'untracked',
+  owner: (new URLSearchParams(location.search).get('o') || '').toLowerCase().replace(/[^a-z0-9.\-]/g, '').slice(0, 40) || 'unassigned',
+  startedAt: null,
+  submitted: false
+};
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+  document.getElementById('progressWrap').hidden = (id !== 'screen-question');
+}
+
+function begin() {
+  if (!state.startedAt) state.startedAt = new Date().toISOString();
+  state.qi = 0;
+  renderQuestion();
+  showScreen('screen-question');
+}
+
+function renderQuestion() {
+  const q = DQUESTIONS[state.qi];
+  document.getElementById('qCount').textContent = 'Question ' + (state.qi + 1) + ' of ' + DQUESTIONS.length;
+  document.getElementById('qDomain').textContent = DDOMAINS[q.d].name;
+  document.getElementById('qStem').textContent = q.stem;
+  document.getElementById('progressBar').style.width = (state.qi / DQUESTIONS.length * 100) + '%';
+  const wrap = document.getElementById('qOptions');
+  wrap.innerHTML = '';
+  for (let li = 0; li < 5; li++) {
+    const b = document.createElement('button');
+    b.className = 'option' + (state.answers[state.qi] === li ? ' selected' : '');
+    b.textContent = q.opts[li];
+    b.onclick = () => {
+      state.answers[state.qi] = li;
+      [...wrap.children].forEach(c => c.classList.remove('selected'));
+      b.classList.add('selected');
+      setTimeout(advance, 240);
+    };
+    wrap.appendChild(b);
+  }
+}
+
+function advance() {
+  if (state.qi < DQUESTIONS.length - 1) {
+    state.qi++;
+    renderQuestion();
+    window.scrollTo(0, 0);
+  } else {
+    buildResults();
+    showScreen('screen-results');
+  }
+}
+
+function goBack() {
+  if (state.qi === 0) { showScreen('screen-landing'); return; }
+  state.qi--;
+  renderQuestion();
+}
+
+function domainScores() {
+  return DDOMAINS.map((d, di) => {
+    const idx = DQUESTIONS.map((q, i) => q.d === di ? i : -1).filter(i => i >= 0);
+    const levels = idx.map(i => state.answers[i] + 1);
+    const avg = levels.reduce((a, b) => a + b, 0) / levels.length;
+    return { domain: d, avg: avg, level: Math.round(avg) };
+  });
+}
+
+function buildResults() {
+  const scores = domainScores();
+  const overallAvg = scores.reduce((a, s) => a + s.avg, 0) / scores.length;
+  const overall = Math.max(1, Math.min(5, Math.round(overallAvg)));
+  document.getElementById('rOverall').textContent = 'Level ' + overall + ' of 5';
+  document.getElementById('rLevelName').textContent = LEVELS[overall - 1].name + ' (data readiness)';
+  document.getElementById('rLevelDesc').textContent = DIMPLICATION[overall];
+  const cards = document.getElementById('domainCards');
+  cards.innerHTML = '';
+  scores.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'domain-card';
+    card.innerHTML =
+      '<div class="dc-head"><h3></h3><div class="dc-level">Level ' + s.level + '</div></div>' +
+      '<div class="dc-track"><div class="dc-fill" style="width:' + (s.avg / 5 * 100) + '%"></div></div>';
+    card.querySelector('h3').textContent = s.domain.name;
+    cards.appendChild(card);
+  });
+  submitResults(scores, overall);
+}
+
+function submissionPayload(scores, overall) {
+  return new URLSearchParams({
+    'form-name': 'data-assessment',
+    'bot-field': '',
+    token: state.token,
+    owner: state.owner,
+    overallData: String(overall),
+    dataDomainLevels: scores.map(s => s.domain.key + ':' + s.avg.toFixed(2)).join(','),
+    dataAnswers: state.answers.map(a => a + 1).join(','),
+    startedAt: state.startedAt || '',
+    durationSec: state.startedAt ? String(Math.round((Date.now() - new Date(state.startedAt).getTime()) / 1000)) : '',
+    dataAppVersion: DAPP_VERSION
+  });
+}
+
+function submitResults(scores, overall) {
+  if (state.submitted || CAPTURE_DISABLED) return;
+  state.submitted = true;
+  const body = submissionPayload(scores, overall).toString();
+  const send = () => fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body
+  });
+  send().then(r => { if (!r.ok) throw new Error('status ' + r.status); })
+    .catch(() => { setTimeout(() => { send().catch(() => {}); }, 5000); });
+}
+</script>
+</body>
+</html>
