@@ -25,7 +25,10 @@ private repo with its own CLAUDE.md.
 ## Forms (Netlify Forms, detected at deploy time from the hidden `<form>` in each page)
 
 - `aip-assessment` (root page): `bot-field`, `token`, `sector`, `overall`, `domainLevels`,
-  `answers`, `startedAt`, `durationSec`, `appVersion`, `owner`.
+  `answers`, `startedAt`, `durationSec`, `appVersion`, `owner`, and since v2.0 `respondentName`,
+  `respondentTitle`, `respondentOrg`, `respondentUnit`, `respondentEmail`, `respondentDate`,
+  `comment1` … `comment14`. Comments and respondent fields are collapsed to one line before submit
+  (the Hub parses `field: value` lines).
 - `data-assessment` (`/data/`): `bot-field`, `token`, `owner`, `overallData`, `dataDomainLevels`,
   `dataAnswers`, `startedAt`, `durationSec`, `dataAppVersion`.
 
@@ -37,6 +40,13 @@ The hidden form and the JavaScript submission payload must list the same field n
   Adding, removing or renaming one needs the matching change in the internal tooling.
 - Answers are decoded by question position. Changing questions, their order or option wording
   is a question-bank change: bump `APP_VERSION` and update the internal decoder in step.
+- Question bank v2.0 (14 questions, 8 areas = groups G1–G8 of the detailed maturity assessment) is
+  word for word the 14 core (◆) questions of the detailed assessment, so the Hub can pre-fill it.
+  Do not reword a question or option, or add per-sector option text, without changing the detailed
+  assessment too. `domainLevels` keys: `strategy_value`, `risk_quant`, `inv_governance`,
+  `portfolio_mgmt`, `budget_funding`, `plan_defence`, `asset_risk`, `asset_strategy`.
+- Level names (Ad hoc, Emerging, Defined, Integrated, Optimized) match the detailed assessment, on
+  both pages.
 - Links arrive as `?p=<token>&o=<owner>`; both values are submitted with the form.
 
 ## After every deploy, verify
@@ -50,5 +60,4 @@ The hidden form and the JavaScript submission payload must list the same field n
 
 ## Known issues
 
-- Copy still says "pound of spend" (question 1, top option; strategic domain, level-5 step).
-  North American respondents see it; make it currency-neutral.
+- None open. ("Pound of spend" was removed with question bank v2.0.)

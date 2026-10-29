@@ -47,6 +47,16 @@ h1,h2,h3{letter-spacing:-0.025em}
 .option{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--ifs-grey-3);border-radius:10px;padding:15px 18px;margin-bottom:11px;font-family:var(--ifs-font);font-size:14.5px;line-height:1.55;color:#333;cursor:pointer;transition:border-color .15s,background .15s}
 .option:hover{border-color:var(--ifs-purple)}
 .option.selected{border-color:var(--ifs-purple);background:#f4ebfd}
+.resp label,.c-label{display:block;font-size:13px;font-weight:600;color:var(--ifs-dark-purple);margin:16px 0 6px}
+.resp input,.c-box{display:block;width:100%;border:1.5px solid var(--ifs-grey-3);border-radius:10px;padding:12px 14px;font-family:var(--ifs-font);font-size:14.5px;color:#333;background:#fff}
+.resp input:focus,.c-box:focus{outline:none;border-color:var(--ifs-purple)}
+.resp input[aria-invalid="true"]{border-color:var(--ifs-fuchsia)}
+.resp .ifs-btn{margin-top:24px}
+.opt{font-weight:400;color:var(--ifs-grey-2)}
+.field-err{color:var(--ifs-fuchsia);font-size:13px;margin-top:12px;min-height:1em}
+.c-box{resize:vertical;line-height:1.5}
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px}
+.ifs-btn:disabled{opacity:.4;cursor:default}
 .btn-back{background:none;border:none;color:var(--ifs-grey-2);text-decoration:underline;cursor:pointer;font-family:var(--ifs-font);font-size:13px;padding:10px 4px}
 
 /* results */
@@ -111,6 +121,26 @@ h1,h2,h3{letter-spacing:-0.025em}
   <input type="text" name="durationSec">
   <input type="text" name="appVersion">
   <input type="text" name="owner">
+  <input type="text" name="respondentName">
+  <input type="text" name="respondentTitle">
+  <input type="text" name="respondentOrg">
+  <input type="text" name="respondentUnit">
+  <input type="text" name="respondentEmail">
+  <input type="text" name="respondentDate">
+  <input type="text" name="comment1">
+  <input type="text" name="comment2">
+  <input type="text" name="comment3">
+  <input type="text" name="comment4">
+  <input type="text" name="comment5">
+  <input type="text" name="comment6">
+  <input type="text" name="comment7">
+  <input type="text" name="comment8">
+  <input type="text" name="comment9">
+  <input type="text" name="comment10">
+  <input type="text" name="comment11">
+  <input type="text" name="comment12">
+  <input type="text" name="comment13">
+  <input type="text" name="comment14">
 </form>
 
 <div class="progress-wrap" id="progressWrap" hidden><div class="progress-bar" id="progressBar"></div></div>
@@ -120,17 +150,42 @@ h1,h2,h3{letter-spacing:-0.025em}
   <div class="shell">
     <div class="hero">
       <div class="eyebrow">IFS Copperleaf</div>
-      <h1>How mature is your organisation's <span class="grad">investment decision-making?</span></h1>
-      <p>This short assessment gives you an independent read on your organisation's maturity in asset investment planning and value-based decision-making, benchmarked against a five-level scale drawn from ISO 55000 and the Institute of Asset Management's maturity model.</p>
-      <p>It is written for people who own or shape capital and asset investment decisions. There are no right answers: each question asks you to pick the description that most closely matches how your organisation actually works today, not how you would like it to work.</p>
+      <h1>How mature is your organization's <span class="grad">investment decision-making?</span></h1>
+      <p>This assessment helps us understand how investment planning works in your organization today. There are 14 questions and it takes about 20 minutes.</p>
+      <p>For each question, select the statement that best describes what your organization does consistently today, not what the policy says or what you aim for. Use the comment box to add examples or context, including where teams would answer differently.</p>
       <div class="meta">
-        <div><span>18</span>questions</div>
-        <div><span>5 to 7</span>minutes</div>
-        <div><span>7</span>decision-making domains</div>
+        <div><span>14</span>questions</div>
+        <div><span>About 20</span>minutes</div>
+        <div><span>8</span>planning areas</div>
       </div>
-      <button class="ifs-btn" onclick="goToSector()">Begin the assessment</button>
-      <p class="privacy">Your results are shared with your IFS Copperleaf team so your follow-up session can be built around them.</p>
+      <button class="ifs-btn" onclick="goToRespondent()">Begin the assessment</button>
+      <p class="privacy">Your answers, comments and the details you enter are shared with your IFS Copperleaf team so your follow-up session can be built around them. They are not shared with anyone else.</p>
     </div>
+  </div>
+</section>
+
+<!-- ============ RESPONDENT ============ -->
+<section class="screen" id="screen-respondent">
+  <div class="shell">
+    <div class="q-domain">Before we start</div>
+    <h2 class="q-stem">About you</h2>
+    <form id="respForm" class="resp" onsubmit="event.preventDefault(); saveRespondent();" novalidate>
+      <label for="rName">Full name</label>
+      <input type="text" id="rName" maxlength="120" autocomplete="name" required>
+      <label for="rTitle">Job title</label>
+      <input type="text" id="rTitle" maxlength="120" autocomplete="organization-title" required>
+      <label for="rOrg">Organization</label>
+      <input type="text" id="rOrg" maxlength="120" autocomplete="organization" required>
+      <label for="rUnit">Business unit or function <span class="opt">(optional)</span></label>
+      <input type="text" id="rUnit" maxlength="120">
+      <label for="rEmail">Email</label>
+      <input type="email" id="rEmail" maxlength="160" autocomplete="email" required>
+      <label for="rDate">Date</label>
+      <input type="date" id="rDate" required>
+      <div class="field-err" id="rErr" role="alert"></div>
+      <button type="submit" class="ifs-btn purple">Continue</button>
+    </form>
+    <button class="btn-back" onclick="showScreen('screen-landing')">Back</button>
   </div>
 </section>
 
@@ -138,9 +193,9 @@ h1,h2,h3{letter-spacing:-0.025em}
 <section class="screen" id="screen-sector">
   <div class="shell">
     <div class="q-domain">Before we start</div>
-    <h2 class="q-stem">Which sector best describes your organisation?</h2>
+    <h2 class="q-stem">Which sector best describes your organization?</h2>
     <div id="sectorOptions"></div>
-    <button class="btn-back" onclick="showScreen('screen-landing')">Back</button>
+    <button class="btn-back" onclick="showScreen('screen-respondent')">Back</button>
   </div>
 </section>
 
@@ -151,7 +206,12 @@ h1,h2,h3{letter-spacing:-0.025em}
     <div class="q-domain" id="qDomain"></div>
     <h2 class="q-stem" id="qStem"></h2>
     <div id="qOptions"></div>
-    <button class="btn-back" onclick="goBack()">Back</button>
+    <label class="c-label" for="qComment">Comments / examples <span class="opt">(optional)</span></label>
+    <textarea id="qComment" class="c-box" rows="3" maxlength="1000" placeholder="Examples or context, including where teams would answer differently"></textarea>
+    <div class="q-nav">
+      <button class="btn-back" onclick="goBack()">Back</button>
+      <button class="ifs-btn purple" id="qNext" onclick="advance()" disabled>Next</button>
+    </div>
   </div>
 </section>
 
@@ -166,23 +226,23 @@ h1,h2,h3{letter-spacing:-0.025em}
     </div>
     <div class="results-grid">
       <div class="chart-card">
-        <h2>Maturity by domain</h2>
+        <h2>Maturity by planning area</h2>
         <div id="radar"></div>
       </div>
       <div class="domain-list">
         <h2>Where you are, and what one level up looks like</h2>
-        <p>Each domain below shows your current level and the next observable behaviours: the practical changes that would mark a move up the scale. Treat this as an improvement pathway rather than a scorecard.</p>
+        <p>Each area below shows your current level and the next observable behaviors: the practical changes that would mark a move up the scale. Treat this as an improvement pathway rather than a scorecard.</p>
         <div id="domainCards"></div>
       </div>
     </div>
     <div class="results-cta noprint">
-      <p>Your IFS Copperleaf contact will walk through these results with you: what they mean for your organisation, and how others in your sector have approached the same gaps.</p>
+      <p>Thank you. We will review your responses and use them as the starting point for our next conversation: what they mean for your organization, and how others in your sector have approached the same gaps.</p>
       <button class="ifs-btn" onclick="window.print()">Save as PDF</button>
     </div>
     <div class="methodology" id="methodology"></div>
     <div class="results-footer">
       <div>IFS Copperleaf readiness assessment</div>
-      <div id="ver">v1.3</div>
+      <div id="ver">v2.0</div>
     </div>
   </div>
 </section>
@@ -190,7 +250,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 <script>
 'use strict';
 let CAPTURE_DISABLED=false;
-const APP_VERSION='v1.3';
+const APP_VERSION='v2.0';
 
 /* =========================================================
    Sector definitions
@@ -212,13 +272,13 @@ const SECTORS = {
     label: 'Water and wastewater (North America)', regulator: 'your commission and primacy agency',
     frame: 'rate case review and consent decree or capital program scrutiny',
     method: 'North American rate case practice and regulatory capital program oversight',
-    resultNote: 'Commissions, primacy agencies and consent decree obligations all reward the same behaviours: quantified risk, whole-life cost comparisons and investment decisions that can be defended line by line, which is what the upper levels of this scale describe.'
+    resultNote: 'Commissions, primacy agencies and consent decree obligations all reward the same behaviors: quantified risk, whole-life cost comparisons and investment decisions that can be defended line by line, which is what the upper levels of this scale describe.'
   },
   elec: {
     label: 'Electricity transmission and distribution (UK)', regulator: 'Ofgem',
     frame: 'the RIIO-3 price control and the Totex Incentive Mechanism',
-    method: 'the RIIO framework and CNAIM monetised network risk',
-    resultNote: 'Under RIIO-3, totex incentives and CNAIM-based monetised risk reporting reward exactly the behaviours the upper levels of this scale describe: quantified probability and consequence of failure, whole-life trade-offs and a defensible line from spend to network risk and consumer value.'
+    method: 'the RIIO framework and CNAIM monetized network risk',
+    resultNote: 'Under RIIO-3, totex incentives and CNAIM-based monetized risk reporting reward exactly the behaviors the upper levels of this scale describe: quantified probability and consequence of failure, whole-life trade-offs and a defensible line from spend to network risk and consumer value.'
   },
   gas: {
     label: 'Gas transmission and distribution (UK)', regulator: 'Ofgem',
@@ -230,7 +290,7 @@ const SECTORS = {
     label: 'Water and wastewater (UK)', regulator: 'Ofwat',
     frame: 'PR24 / AMP8 totex and outcome delivery incentives',
     method: 'the PR24 framework and the 25-year Long-Term Delivery Strategy',
-    resultNote: 'PR24 totex and outcome delivery incentives, together with the 25-year Long-Term Delivery Strategy and its adaptive pathways, reward organisations that can quantify risk and value, optimise across AMP boundaries and evidence every choice in the plan.'
+    resultNote: 'PR24 totex and outcome delivery incentives, together with the 25-year Long-Term Delivery Strategy and its adaptive pathways, reward organizations that can quantify risk and value, optimize across AMP boundaries and evidence every choice in the plan.'
   },
   transport: {
     label: 'Transport (rail and road, UK)', regulator: 'the ORR',
@@ -241,7 +301,7 @@ const SECTORS = {
   other: {
     label: 'Other regulated infrastructure', regulator: 'your regulator',
     frame: 'your regulatory settlement',
-    method: 'recognised regulatory expectations for asset-intensive infrastructure',
+    method: 'recognized regulatory expectations for asset-intensive infrastructure',
     resultNote: 'Regulated infrastructure settlements increasingly reward quantified risk, whole-life value and decisions that can be evidenced on demand, whatever the specific framework.'
   }
 };
@@ -250,107 +310,106 @@ const SECTORS = {
    The five maturity levels
    ========================================================= */
 const LEVELS = [
-  { n: 1, name: 'Reactive',
-    desc: 'Bottom-up, cost-driven decisions in departmental silos, using spreadsheets and expert opinion. No explicit line of sight to corporate objectives; risk is qualitative; planning is annual and budget-bound.' },
-  { n: 2, name: 'Aware',
-    desc: 'The need for structured investment planning and value and risk trade-offs is recognised; intent and pilots exist, but practice is inconsistent and not resourced across the portfolio.' },
-  { n: 3, name: 'Defined (ISO 55001 conformance)',
-    desc: 'A documented value framework and asset management plan exist; decisions systematically weigh cost, risk and performance with a clear line of sight to corporate objectives; risk is quantified; whole-life cost is standard.' },
-  { n: 4, name: 'Optimised',
-    desc: 'Portfolio-level optimisation across asset classes under multiple constraints; probabilistic, risk-based decisions; scenario and what-if analysis; decisions are transparent and regulator-defensible; outcomes tracked against plan.' },
-  { n: 5, name: 'Adaptive',
-    desc: 'Enterprise-wide, continuously optimised value-based planning integrating condition, criticality, lifecycle and strategy; adaptive multi-decade pathways under uncertainty; leading practice benchmarked externally; value realisation demonstrably measured.' }
+  { n: 1, name: 'Ad hoc',
+    desc: 'No defined process. Outcomes depend on individual knowledge and availability.' },
+  { n: 2, name: 'Emerging',
+    desc: 'The need is recognized and some practice exists, but it is inconsistent and person-dependent.' },
+  { n: 3, name: 'Defined',
+    desc: 'A documented process exists and is followed. Data supports it, but assembly is manual and effortful.' },
+  { n: 4, name: 'Integrated',
+    desc: 'Defined, applied consistently across the organization, supported by systems and measured. Results are repeatable.' },
+  { n: 5, name: 'Optimized',
+    desc: 'Quantified, embedded in the way the organization runs, continuously improved, and used to make trade-offs visible at executive level.' }
 ];
 
 /* =========================================================
-   Domains and improvement pathways
+   Sections (the eight groups of the detailed maturity
+   assessment) and improvement pathways
    ========================================================= */
 const DOMAINS = [
-  { key: 'strategic', name: 'Strategic alignment and line of sight',
+  { key: 'strategy_value', name: 'Strategy and value', short: 'Strategy and value',
     path: [
-      'Investment papers begin to name the corporate objectives they serve, and leadership asks for that link as a matter of course.',
-      'A documented set of corporate objectives that every major investment case must reference, with approval withheld where the line of sight is missing.',
-      'Contribution to objectives scored on a consistent basis, visibly changing which investments proceed.',
-      'Any pound of spend traceable to a corporate outcome, with the plan re-optimised whenever strategy moves.'
+      'Business cases begin to name the corporate goals they serve, and scoring templates start to replace pure advocacy.',
+      'A documented value framework, endorsed by senior management, with defined criteria for cost, risk and non-financial benefits applied to every major investment.',
+      'Executive-owned, weighted value measures: contribution to strategy is scored consistently and non-financial benefits are quantified, visibly changing which investments proceed.',
+      'All benefits, costs and risks on one common value scale, calibrated against strategy and regulator expectations, so any spend can be traced to a corporate outcome.'
     ]},
-  { key: 'value', name: 'Value framework and multi-criteria decision-making',
+  { key: 'risk_quant', name: 'Risk quantification', short: 'Risk',
     path: [
-      'Common scoring criteria drafted and piloted on one investment cycle, replacing pure advocacy.',
-      'A single documented value framework covering cost, risk and performance, endorsed by senior management and applied to all major cases.',
-      'Executive-owned weightings that reflect corporate priorities, with benefits quantified rather than scored.',
-      'All benefits, costs and risks expressed on one monetised scale, so any two investments anywhere in the business are directly comparable.'
+      'Risk stated explicitly in every major case using a shared matrix, and the impact of deferral recorded rather than assumed.',
+      'Probability and consequence of failure quantified per asset class, with the cost of deferring an investment available on request.',
+      'Risk quantified consistently and projected over time, so deferral cost, including growing risk and benefit forgone, is a standard output for every investment.',
+      'Risk monetized in a common currency across asset classes, with optimal intervention timing calculated across the portfolio as data changes.'
     ]},
-  { key: 'risk', name: 'Risk quantification',
+  { key: 'inv_governance', name: 'Investment governance', short: 'Governance',
     path: [
-      'Risk stated explicitly in every major case, with a shared vocabulary for probability and consequence, even where still qualitative.',
-      'Probability and consequence of failure quantified for critical asset classes, derived from condition and failure history.',
-      'Risk modelled over time, so the cost of deferring an intervention is visible before the decision is made.',
-      'Risk monetised in a common currency across all asset classes, trading off directly against cost and performance.'
+      'Alternatives named in business cases, and the plan built each year on standard templates rather than one-off spreadsheets.',
+      'A documented planning process with a named owner and versioned models, with alternatives evaluated for major investments.',
+      'An enterprise planning function running scenario and sensitivity analysis as routine, with alternatives and do-nothing evaluated for every investment.',
+      'Alternatives modelled as competing options with full value, risk and timing profiles, and analysis that is reproducible on demand selecting between them.'
     ]},
-  { key: 'wlc', name: 'Whole-life cost and lifecycle value',
+  { key: 'portfolio_mgmt', name: 'Portfolio management', short: 'Portfolio',
     path: [
-      'Operating and maintenance costs routinely included alongside capital when options are compared.',
-      'A standard whole-life costing method over a defined horizon, applied to all major options.',
-      'Discounted whole-life comparisons across repair, refurbish and replace options as the default analysis.',
-      'Intervention choice and timing optimised over the full asset life, refreshed as condition data changes.'
+      'A single ranked list on an agreed measure, with workforce and delivery constraints considered before the plan is set.',
+      'Prioritization against defined criteria, key constraints checked before approval, and a defined set of responses when the budget changes.',
+      'Investments ranked by value, with resource constraints as inputs to the analysis and the affected part of the plan re-analyzed within days of a change.',
+      'The whole portfolio optimized against budget, resource and risk constraints together, and re-optimized on demand against the approved baseline.'
     ]},
-  { key: 'portfolio', name: 'Portfolio optimisation and prioritisation',
+  { key: 'budget_funding', name: 'Budget and funding', short: 'Budget',
     path: [
-      'A single ranked list across departments, built on an agreed scoring basis rather than negotiation.',
-      'Prioritisation criteria applied consistently, with borderline decisions reviewed and recorded.',
-      'Optimisation within asset classes or budget lines, demonstrating the value gained over a simple ranked cut.',
-      'One optimisation across the whole portfolio under budget, resource and risk constraints, with alternative funding scenarios generated in hours.'
+      'Business units involved in setting the budget, even where it still starts from last year’s figure.',
+      'The budget built from the projects engineers propose, rather than from last year’s number.',
+      'Investment need raised from several drivers, such as incidents, asset condition and asset age, so the budget reflects the asset base.',
+      'The budget derived from an optimized plan that covers sustainment and growth needs, using a defined set of factors.'
     ]},
-  { key: 'data', name: 'Data, information and analytics',
+  { key: 'plan_defence', name: 'Capital plan defense', short: 'Plan defense',
     path: [
-      'A named owner for core asset data and an honest baseline of its coverage and quality.',
-      'A recognised system of record for asset data, with quality issues logged and worked down.',
-      'Measured data quality, integration across the systems planning depends on, and scenario analysis as routine.',
-      'Data managed as a corporate asset, current and quality-assured, feeding predictive models the plan depends on.'
+      'Decision rationale written down at the point of approval, so a challenge does not depend on memory.',
+      'Business cases and the approval trail documented and retrievable for every investment.',
+      'The decision, the alternatives considered and the evidence used recorded together, ready to walk through in a day.',
+      'Every decision transparent, auditable and traceable to value and strategy on demand.'
     ]},
-  { key: 'governance', name: 'Governance, assurance and regulatory defensibility',
+  { key: 'asset_risk', name: 'Asset risk modelling', short: 'Asset risk',
     path: [
-      'Decision rationale written down at the point of approval, every time.',
-      'A defined governance process with documented sign-offs and a retrievable approval trail.',
-      'Alternatives considered and evidence used recorded alongside each decision, ready to walk through in a day.',
-      'Continuous auditability: any decision traceable to value and strategy on demand, with the method itself independently assured.'
+      'Expert estimates of probability and consequence of failure captured on a consistent basis.',
+      'Probability and consequence derived from condition and failure history for major asset classes, using a documented method.',
+      'Statistical models built from condition, age and observed failures, refreshed as new data arrives.',
+      'Continuously calibrated models across the asset base, with consequence values agreed across safety, environmental, customer and financial dimensions.'
+    ]},
+  { key: 'asset_strategy', name: 'Asset strategy optimization', short: 'Asset strategy',
+    path: [
+      'A protected share of the budget for long-term sustainment, so it is not always displaced by reactive work.',
+      'Short- and long-term demands collected in one place and compared openly.',
+      'Short- and long-term demands scored against the same criteria to set priority.',
+      'Short-, mid- and long-term demands held in one source of truth and traded off against each other, with the optimal plan built from corporate objectives.'
     ]}
 ];
 
-const SUSTAIN = 'Operating at the leading edge of this domain. The work shifts to sustaining calibration, benchmarking externally and demonstrating that forecast value is actually realised.';
+const SUSTAIN = 'Operating at the leading edge of this area. The work shifts to sustaining calibration, benchmarking externally and demonstrating that forecast value is actually realized.';
 
 /* =========================================================
    Questions. Each option maps to levels 1 through 5.
-   sfx = optional per-sector suffix appended to an option.
+   Wording is identical to the core questions of the detailed
+   maturity assessment, so no per-sector variants.
    ========================================================= */
 const QUESTIONS = [
-  { d: 0, stem: 'How do investment decisions connect to your corporate goals?',
+  { d: 0, stem: 'How do investment decisions connect to corporate goals?',
     opts: [
-      'They generally don’t. Projects are justified individually, on their own merits.',
-      'We reference strategy in business cases, but the link is narrative rather than measured.',
+      'Investment decisions generally aren’t connected to corporate goals. Projects are justified individually, on their own merits.',
+      'Strategy is referenced in business cases, but the link is narrative rather than measured.',
       'Most major investments reference documented corporate objectives, and approval expects that link.',
       'Contribution to corporate objectives is scored consistently and influences which investments proceed.',
-      'Every candidate investment is scored on its contribution to strategy, and we can trace any pound of spend to a corporate outcome.'
+      'Every candidate investment is scored on its contribution to strategy, and any spend can be traced to a corporate outcome.'
     ]},
-  { d: 0, stem: 'When corporate strategy changes, what happens to the investment plan?',
+  { d: 0, stem: 'When benefits aren’t all financial, such as safety, environment, reputation or customer service, how does the organization compare one investment against another?',
     opts: [
-      'Very little. The plan carries on until the next annual budget round.',
-      'We revisit the plan informally. Some projects get re-argued; most continue as they were.',
-      'A defined process reviews the plan against the new objectives, though reworking it takes months.',
-      'We re-run prioritisation against the updated objectives and can show exactly what changed and why.',
-      'The plan is re-optimised against the new strategy within days, with the trade-offs quantified for the board.'
-    ],
-    sfx: { 4: { water: ' That responsiveness is what an adaptive long-term delivery strategy asks of us.',
-                gas: ' That matters to us given the uncertainty net zero puts over the future of the asset base.' } }},
-  { d: 1, stem: 'How do you compare very different investments, such as a safety project against a reliability upgrade?',
-    opts: [
-      'Mostly judgement and advocacy. The strongest case, or the most persuasive sponsor, tends to win.',
-      'Scoring templates exist in places, but different teams apply different criteria.',
-      'We use defined criteria covering cost, risk and performance, applied consistently to major investments.',
-      'Benefits and risks are quantified against a common set of measures agreed with the executive.',
-      'All benefits, costs and risks are expressed on a common value scale, so any two investments are directly comparable.'
+      'Mostly judgement and advocacy. Non-financial benefits appear as narrative, if at all, and the strongest sponsor tends to win.',
+      'Scoring templates exist in places, with high, medium or low ratings, but different teams apply different criteria.',
+      'Defined criteria and scales cover cost, risk and non-financial benefits, applied consistently to major investments.',
+      'Non-financial benefits are quantified and, where credible, monetized against a common set of measures agreed with the executive.',
+      'All benefits, costs and risks sit on one common value scale, with documented and defensible valuations, so any two investments are directly comparable.'
     ]},
-  { d: 1, stem: 'Who decides what counts as value in an investment case?',
+  { d: 0, stem: 'Who decides what counts as value in an investment case?',
     opts: [
       'Each project team, case by case.',
       'Individual departments have their own definitions, and they rarely match.',
@@ -358,35 +417,79 @@ const QUESTIONS = [
       'The framework is owned at executive level, weighted to reflect corporate priorities, and reviewed on a set cycle.',
       'The framework is a living corporate asset: weightings are calibrated against strategy and regulator expectations, and every part of the business plans against it.'
     ]},
-  { d: 1, stem: 'How are non-financial benefits, such as safety, environment or customer service, handled in decisions?',
-    opts: [
-      'As narrative in the business case, if at all.',
-      'Scored qualitatively, high, medium or low, without a common basis.',
-      'Measured on defined scales so they can be weighed alongside cost.',
-      'Quantified and, where credible, monetised, so they trade off directly against financial measures.',
-      'Monetised on a consistent basis across the whole portfolio, with the valuations documented and defensible.'
-    ],
-    sfx: { 4: { water: ' Our valuations line up with how outcome delivery incentives price performance.' } }},
-  { d: 2, stem: 'How is risk represented in investment decisions?',
+  { d: 1, stem: 'How is risk represented in investment decisions?',
     opts: [
       'Qualitatively, or not at all.',
       'Through risk matrices and heat maps, with scores that vary from team to team.',
       'Quantified per asset class, using probability and consequence of failure.',
       'Quantified consistently, with intervention timing informed by how risk grows over time.',
-      'Monetised in a common currency across all asset classes, so risk trades off directly against cost and performance.'
-    ],
-    sfx: { 3: { elec: ' Our approach is consistent with CNAIM.' },
-           4: { elec: ' This is the logic CNAIM formalises: probability times consequence, expressed in monetary terms.',
-                gas: ' This underpins how we report against Network Output Measures.' } }},
-  { d: 2, stem: 'How do you know how asset risk will change if you defer an intervention?',
-    opts: [
-      'We don’t, beyond engineering judgement.',
-      'We can describe the direction of travel, but not put numbers on it.',
-      'Degradation models exist for critical asset classes and inform intervention timing.',
-      'We model risk over time for most asset classes and test deferral scenarios before committing.',
-      'Deferral impacts are quantified across the portfolio, so we can state the risk cost of any budget cut.'
+      'Monetized in a common currency across all asset classes, so risk trades off directly against cost and performance.'
     ]},
-  { d: 2, stem: 'How are probability and consequence of asset failure established?',
+  { d: 1, stem: 'How does the organization assess and measure the risk or impact of deferring an investment today?',
+    opts: [
+      'The risk or impact of deferral isn’t measured.',
+      'The responsible engineer judges it qualitatively.',
+      'The cost of deferral can be quantified for individual investments on request.',
+      'Deferral cost, including growing risk, benefit forgone and the time value of money, is a standard output for every investment.',
+      'Optimal timing is calculated across the portfolio and updated as cost, risk and constraint data change.'
+    ]},
+  { d: 2, stem: 'How are alternatives and a do-nothing option evaluated for each investment?',
+    opts: [
+      'Only the preferred option is presented.',
+      'Alternatives are named but not evaluated.',
+      'Alternatives are evaluated for major investments.',
+      'Alternatives and do-nothing are evaluated as standard practice.',
+      'Alternatives are modelled as competing options with full value, risk and timing profiles, and the analysis selects between them.'
+    ]},
+  { d: 2, stem: 'How good is the organization’s capital planning process, and what analysis sits behind a typical investment decision?',
+    opts: [
+      'There is no defined process. The plan is pulled together at budget time, and decisions rest on spreadsheets built for the occasion.',
+      'A small team builds the plan each year alongside other duties, using standard spreadsheet templates maintained locally.',
+      'A documented process with a named owner and consistent analytical methods for major decisions, with versioned models.',
+      'An enterprise planning function owns the process, with consistent scenario and sensitivity analysis as routine practice.',
+      'The planning function owns the decision framework as well as the plan, with predictive and probabilistic analytics embedded in planning and any result reproducible on demand.'
+    ]},
+  { d: 3, stem: 'When funds and resources are limited, how does the organization compare business cases and include the best candidate projects in the investment plan?',
+    opts: [
+      'Manual ranking, negotiation, or first come first served.',
+      'Sorted by a single measure such as cost or urgency.',
+      'Prioritized against defined criteria, with senior review of the borderline cases.',
+      'Ranked by a value or cost-benefit ratio, with constraints checked afterwards.',
+      'Optimized across the whole portfolio to maximize value under budget, resource and risk constraints.'
+    ]},
+  { d: 3, stem: 'How does the organization handle constraints other than money, such as workforce, outages or delivery capacity?',
+    opts: [
+      'They surface during delivery, as problems.',
+      'They are considered informally when a plan looks ambitious.',
+      'Key constraints are checked before the plan is approved.',
+      'Resource and delivery constraints are inputs to the planning analysis, not afterthoughts.',
+      'The portfolio is optimized against money, resources and delivery constraints together, with bottlenecks visible years ahead.'
+    ]},
+  { d: 3, stem: 'Once the plan is approved, how does the organization adapt to external changes, such as a budget cut, and how quickly can it rebalance priorities and communicate the updated plan?',
+    opts: [
+      'There is no way to rebalance. Business units absorb the impact.',
+      'Business units seek extra budget or defer projects until the impact is bearable. It can take months.',
+      'Each business unit evaluates the change and applies mitigations such as reducing scope, deferring or requesting funds. It takes weeks.',
+      'Changes are assessed against a defined set of mitigations, and the affected part of the plan is re-analyzed within days.',
+      'Changes are quantified and the plan is re-optimized on demand, with the impact shown against the approved baseline.'
+    ]},
+  { d: 4, stem: 'What is the basis for the budget today, and how is the budget needed built?',
+    opts: [
+      'Corporate allocates it, and business units aren’t involved.',
+      'Last year’s budget plus a small increment.',
+      'Built from a list of projects proposed by engineers.',
+      'Built from projects raised by several drivers, such as incidents, asset condition and asset age.',
+      'Built from sustainment and growth needs using a defined set of factors, and derived from an optimized plan.'
+    ]},
+  { d: 5, stem: 'If the board or regulator challenged an investment or a funding request, how quickly could the organization defend it?',
+    opts: [
+      'With difficulty. The rationale isn’t documented.',
+      'It could be reconstructed, given time and the right people.',
+      'The business case and approval trail are documented and retrievable.',
+      'The decision, the alternatives considered and the evidence used are all recorded and could be walked through in a day.',
+      'Every decision is transparent, auditable and traceable to value and strategy on demand.'
+    ]},
+  { d: 6, stem: 'How are probability and consequence of asset failure established?',
     opts: [
       'They aren’t stated explicitly.',
       'Expert estimates, recorded inconsistently.',
@@ -394,96 +497,14 @@ const QUESTIONS = [
       'Statistically derived from condition, age and observed failures, and refreshed as new data arrives.',
       'Continuously calibrated models cover the asset base, with consequence values agreed across safety, environmental, customer and financial dimensions.'
     ]},
-  { d: 3, stem: 'When you evaluate an option, what costs do you count?',
+  { d: 7, stem: 'To what extent is long-term asset sustainment considered in planning?',
     opts: [
-      'The upfront capital cost.',
-      'Capital, plus operating costs when someone remembers to include them.',
-      'Capital plus major operating and maintenance costs over a defined period.',
-      'Whole-life costs on a discounted basis, compared across intervention options.',
-      'Full whole-life cost including disposal, on a present-value basis, as the standard for every investment.'
-    ],
-    sfx: { 3: { elec: ' A totex settlement makes anything less than this hard to defend.',
-                gas: ' A totex settlement makes anything less than this hard to defend.' },
-           4: { transport: ' This is the discipline the CP7 whole-life-cost framework expects.' } }},
-  { d: 3, stem: 'How do you choose between repairing, refurbishing and replacing an asset?',
-    opts: [
-      'Replace when it fails, or when budget allows.',
-      'Engineering preference, with a cost comparison for the chosen option only.',
-      'Options are compared on cost and risk over a defined horizon for major decisions.',
-      'Lifecycle strategies per asset class define the economic intervention point, tested against alternatives.',
-      'Intervention choice and timing are optimised over the asset’s life, balancing cost, risk and performance, and revisited as condition data changes.'
-    ],
-    sfx: { 4: { transport: ' The renewals-versus-repair trade-off is settled on evidence, not custom.' } }},
-  { d: 4, stem: 'How do you choose which projects make the cut under a fixed budget?',
-    opts: [
-      'Manual ranking, negotiation, or first come first served.',
-      'Ranked by a score or cost-benefit ratio, then cut from the bottom.',
-      'Prioritised against defined criteria, with senior review of the borderline cases.',
-      'Optimised within asset classes or departments to get the most value from each allocation.',
-      'Optimised across the whole portfolio to maximise value under budget, resource and risk constraints.'
-    ]},
-  { d: 4, stem: 'What happens when the budget changes mid-cycle, say a ten percent cut?',
-    opts: [
-      'Pro-rata cuts, or delaying whatever is least contested.',
-      'Managers re-argue their lists, and the outcome depends on who is in the room.',
-      'We re-apply the prioritisation criteria, which takes weeks.',
-      'We re-run the portfolio analysis and present the consequences of the cut in risk and performance terms.',
-      'We generate revised optimal portfolios in hours and show the board exactly what value is lost at each funding level.'
-    ],
-    sfx: { 4: { elec: ' It is the behaviour a totex incentive mechanism is designed to reward.',
-                water: ' It is the behaviour PR24’s totex and outcome incentives are designed to reward.' } }},
-  { d: 4, stem: 'How do you handle constraints other than money, such as workforce, outages or delivery capacity?',
-    opts: [
-      'They surface during delivery, as problems.',
-      'They are considered informally when a plan looks ambitious.',
-      'Key constraints are checked before the plan is approved.',
-      'Resource and delivery constraints are inputs to the planning analysis, not afterthoughts.',
-      'The portfolio is optimised against money, resources and delivery constraints together, with bottlenecks visible years ahead.'
-    ]},
-  { d: 5, stem: 'How good is the asset data behind your investment decisions?',
-    opts: [
-      'Fragmented, out of date, and held in silos.',
-      'Improving in places, but coverage and quality are uneven and trust is low.',
-      'A recognised system of record exists for core asset data, with defined ownership.',
-      'Quality-managed data with measured accuracy, integrated across the systems planning needs.',
-      'Managed as an asset in its own right: quality-assured, current, and feeding predictive models.'
-    ]},
-  { d: 5, stem: 'What analysis sits behind a typical investment decision?',
-    opts: [
-      'Spreadsheets built for the occasion.',
-      'Standard templates, still spreadsheet-based and locally maintained.',
-      'Consistent analytical methods for major decisions, with versioned models.',
-      'Dedicated decision-analytics tooling, with scenario and sensitivity analysis as routine practice.',
-      'Predictive and probabilistic analytics embedded in planning, with any result reproducible on demand.'
-    ]},
-  { d: 5, stem: 'How easily can you assemble a portfolio-wide view of asset condition and risk?',
-    opts: [
-      'We can’t, without a one-off exercise.',
-      'With significant manual effort, and the answer dates quickly.',
-      'Periodic reporting gives a reasonable view for major asset classes.',
-      'A maintained, near-current view exists across most of the asset base.',
-      'On demand, current and consistent, and it drives the plan rather than merely describing it.'
-    ]},
-  { d: 6, stem: 'If your regulator or board challenged an investment, how quickly could you defend it?',
-    opts: [
-      'With difficulty. The rationale isn’t documented.',
-      'We could reconstruct it, given time and the right people.',
-      'The business case and approval trail are documented and retrievable.',
-      'The decision, the alternatives considered and the evidence used are all recorded and could be walked through in a day.',
-      'Every decision is transparent, auditable and traceable to value and strategy on demand.'
-    ]},
-  { d: 6, stem: 'How is your investment plan assured before it goes to the board or the regulator?',
-    opts: [
-      'It isn’t, beyond finance checking the totals.',
-      'Peer review by senior managers, informally.',
-      'A defined governance process with documented sign-offs at each stage.',
-      'Independent assurance of both the numbers and the method, with challenge formally recorded.',
-      'Assurance is continuous: the plan, its assumptions and its optimisation are open to audit at any time.'
-    ],
-    sfx: { 4: { elec: ' Ofgem has seen and accepted the method.',
-                gas: ' Ofgem has seen and accepted the method.',
-                water: ' Ofwat has seen and accepted the method.',
-                transport: ' The ORR has seen and accepted the method.' } }}
+      'Reactive and emergency work takes priority. The focus is on short-term operational needs.',
+      'Most of the budget goes to short-term demands, with a fixed percentage reserved for the long term.',
+      'Short- and long-term demands are collated and compared qualitatively.',
+      'Short- and long-term demands are scored against the same criteria to set priority.',
+      'Short-, mid- and long-term demands sit in one source of truth, are compared against each other, and the optimal plan is built from corporate objectives.'
+    ]}
 ];
 
 /* =========================================================
@@ -492,6 +513,8 @@ const QUESTIONS = [
 const state = {
   sector: null,
   answers: new Array(QUESTIONS.length).fill(null),
+  comments: new Array(QUESTIONS.length).fill(''),
+  respondent: null,
   qi: 0,
   token: new URLSearchParams(location.search).get('p') || 'untracked',
   owner: (new URLSearchParams(location.search).get('o') || '').toLowerCase().replace(/[^a-z0-9.\-]/g, '').slice(0, 40) || 'unassigned',
@@ -509,8 +532,41 @@ function showScreen(id) {
   document.getElementById('progressWrap').hidden = (id !== 'screen-question');
 }
 
-function goToSector() {
+function goToRespondent() {
   if (!state.startedAt) state.startedAt = new Date().toISOString();
+  const d = document.getElementById('rDate');
+  if (!d.value) {
+    const now = new Date();
+    d.value = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+  }
+  showScreen('screen-respondent');
+}
+
+/* one line, trimmed, capped: keeps submissions readable in notification emails */
+function clean(v, max) { return String(v || '').replace(/\s+/g, ' ').trim().slice(0, max); }
+
+function saveRespondent() {
+  const val = id => clean(document.getElementById(id).value, id === 'rEmail' ? 160 : 120);
+  const required = ['rName', 'rTitle', 'rOrg', 'rEmail', 'rDate'];
+  let firstBad = null;
+  required.forEach(id => {
+    const el = document.getElementById(id);
+    const bad = !val(id) || (id === 'rEmail' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val(id)));
+    el.setAttribute('aria-invalid', bad ? 'true' : 'false');
+    if (bad && !firstBad) firstBad = el;
+  });
+  const err = document.getElementById('rErr');
+  if (firstBad) {
+    err.textContent = 'Please complete the highlighted fields' + (firstBad.id === 'rEmail' && val('rEmail') ? ' (the email address looks incomplete).' : '.');
+    firstBad.focus();
+    return;
+  }
+  err.textContent = '';
+  state.respondent = { name: val('rName'), title: val('rTitle'), org: val('rOrg'), unit: val('rUnit'), email: val('rEmail'), date: val('rDate') };
+  goToSector();
+}
+
+function goToSector() {
   const wrap = document.getElementById('sectorOptions');
   if (!wrap.childElementCount) {
     Object.keys(SECTORS).forEach(k => {
@@ -542,22 +598,34 @@ function renderQuestion() {
   document.getElementById('qStem').textContent = q.stem;
   document.getElementById('progressBar').style.width = (state.qi / QUESTIONS.length * 100) + '%';
   const wrap = document.getElementById('qOptions');
+  const next = document.getElementById('qNext');
   wrap.innerHTML = '';
   for (let li = 0; li < 5; li++) {
     const b = document.createElement('button');
     b.className = 'option' + (state.answers[state.qi] === li ? ' selected' : '');
     b.textContent = optionText(q, li);
+    b.setAttribute('aria-pressed', state.answers[state.qi] === li ? 'true' : 'false');
     b.onclick = () => {
       state.answers[state.qi] = li;
-      [...wrap.children].forEach(c => c.classList.remove('selected'));
+      [...wrap.children].forEach(c => { c.classList.remove('selected'); c.setAttribute('aria-pressed', 'false'); });
       b.classList.add('selected');
-      setTimeout(advance, 240);
+      b.setAttribute('aria-pressed', 'true');
+      next.disabled = false;
     };
     wrap.appendChild(b);
   }
+  document.getElementById('qComment').value = state.comments[state.qi];
+  next.disabled = state.answers[state.qi] === null;
+  next.textContent = state.qi === QUESTIONS.length - 1 ? 'See my results' : 'Next';
+}
+
+function saveComment() {
+  state.comments[state.qi] = clean(document.getElementById('qComment').value, 1000);
 }
 
 function advance() {
+  if (state.answers[state.qi] === null) return;
+  saveComment();
   if (state.qi < QUESTIONS.length - 1) {
     state.qi++;
     renderQuestion();
@@ -569,6 +637,7 @@ function advance() {
 }
 
 function goBack() {
+  saveComment();
   if (state.qi === 0) { showScreen('screen-sector'); return; }
   state.qi--;
   renderQuestion();
@@ -619,7 +688,7 @@ function buildResults() {
   });
 
   document.getElementById('methodology').textContent =
-    'Methodology. This assessment blends the Institute of Asset Management / GFMAM asset management maturity scale with ISO 55000 principles and value-based investment planning concepts; level 3 corresponds to ISO 55001 conformance. Sector framing draws on ' + sector.method + '. It is an indicative readiness screen based on self-reported behaviours, not an accredited ISO 55001 gap assessment, and results should be read as a starting point for discussion rather than a formal audit finding.';
+    'Methodology. This assessment blends the Institute of Asset Management / GFMAM asset management maturity scale with ISO 55000 principles and value-based investment planning concepts; level 3 corresponds to ISO 55001 conformance. Sector framing draws on ' + sector.method + '. It is an indicative readiness screen based on self-reported behaviors, not an accredited ISO 55001 gap assessment, and results should be read as a starting point for discussion rather than a formal audit finding.';
 
   submitResults(scores, overall);
 }
@@ -635,7 +704,7 @@ function drawRadar(scores) {
     const rr = r * v / 5;
     return [cx + rr * Math.cos(angle(i)), cy + rr * Math.sin(angle(i))];
   };
-  let svg = '<svg viewBox="-50 -10 ' + (size + 100) + ' ' + (size + 20) + '" width="100%" role="img" aria-label="Radar chart of maturity level per domain" xmlns="http://www.w3.org/2000/svg">';
+  let svg = '<svg viewBox="-50 -10 ' + (size + 100) + ' ' + (size + 20) + '" width="100%" role="img" aria-label="Radar chart of maturity level per planning area" xmlns="http://www.w3.org/2000/svg">';
   for (let ring = 1; ring <= 5; ring++) {
     const pts = [];
     for (let i = 0; i < n; i++) pts.push(pt(i, ring).join(','));
@@ -650,13 +719,12 @@ function drawRadar(scores) {
     const [x, y] = pt(i, s.avg);
     svg += '<circle cx="' + x + '" cy="' + y + '" r="4" fill="#72C9F8" stroke="#8427E2" stroke-width="1.5"/>';
   });
-  const shortNames = ['Strategy', 'Value', 'Risk', 'Whole-life', 'Portfolio', 'Data', 'Governance'];
   scores.forEach((s, i) => {
     const [x, y] = pt(i, 6.1);
     let anchor = 'middle';
     if (x < cx - 12) anchor = 'end';
     if (x > cx + 12) anchor = 'start';
-    svg += '<text x="' + x + '" y="' + (y + 4) + '" text-anchor="' + anchor + '" font-family="Euclid Circular A, Century Gothic, sans-serif" font-size="12" font-weight="600" fill="#360065">' + shortNames[i] + '</text>';
+    svg += '<text x="' + x + '" y="' + (y + 4) + '" text-anchor="' + anchor + '" font-family="Euclid Circular A, Century Gothic, sans-serif" font-size="12" font-weight="600" fill="#360065">' + s.domain.short + '</text>';
   });
   svg += '</svg>';
   document.getElementById('radar').innerHTML = svg;
@@ -668,7 +736,7 @@ function drawRadar(scores) {
    always renders. Payload is retried once after 5 seconds.
    ========================================================= */
 function submissionPayload(scores, overall) {
-  return new URLSearchParams({
+  const p = new URLSearchParams({
     'form-name': 'aip-assessment',
     'bot-field': '',
     token: state.token,
@@ -681,6 +749,15 @@ function submissionPayload(scores, overall) {
     appVersion: APP_VERSION,
     owner: state.owner
   });
+  const r = state.respondent || {};
+  p.set('respondentName', r.name || '');
+  p.set('respondentTitle', r.title || '');
+  p.set('respondentOrg', r.org || '');
+  p.set('respondentUnit', r.unit || '');
+  p.set('respondentEmail', r.email || '');
+  p.set('respondentDate', r.date || '');
+  state.comments.forEach((c, i) => p.set('comment' + (i + 1), c));
+  return p;
 }
 
 function submitResults(scores, overall) {
