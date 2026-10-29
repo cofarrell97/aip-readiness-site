@@ -47,6 +47,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 .option{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--ifs-grey-3);border-radius:10px;padding:15px 18px;margin-bottom:11px;font-family:var(--ifs-font);font-size:14.5px;line-height:1.55;color:#333;cursor:pointer;transition:border-color .15s,background .15s}
 .option:hover{border-color:var(--ifs-purple)}
 .option.selected{border-color:var(--ifs-purple);background:#f4ebfd}
+.option .lvl{display:block;font-size:11px;letter-spacing:.045em;text-transform:uppercase;font-weight:600;color:var(--ifs-purple);margin-bottom:3px}
 .resp label,.c-label{display:block;font-size:13px;font-weight:600;color:var(--ifs-dark-purple);margin:16px 0 6px}
 .resp input,.c-box{display:block;width:100%;border:1.5px solid var(--ifs-grey-3);border-radius:10px;padding:12px 14px;font-family:var(--ifs-font);font-size:14.5px;color:#333;background:#fff}
 .resp input:focus,.c-box:focus{outline:none;border-color:var(--ifs-purple)}
@@ -186,16 +187,6 @@ h1,h2,h3{letter-spacing:-0.025em}
   </div>
 </section>
 
-<!-- ============ SECTOR ============ -->
-<section class="screen" id="screen-sector">
-  <div class="shell">
-    <div class="q-domain">Before we start</div>
-    <h2 class="q-stem">Which sector best describes your organization?</h2>
-    <div id="sectorOptions"></div>
-    <button class="btn-back" onclick="showScreen('screen-respondent')">Back</button>
-  </div>
-</section>
-
 <!-- ============ QUESTION ============ -->
 <section class="screen" id="screen-question">
   <div class="shell">
@@ -239,7 +230,7 @@ h1,h2,h3{letter-spacing:-0.025em}
     <div class="methodology" id="methodology"></div>
     <div class="results-footer">
       <div>IFS Copperleaf readiness assessment</div>
-      <div id="ver">v2.2</div>
+      <div id="ver">v2.3</div>
     </div>
   </div>
 </section>
@@ -247,7 +238,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 <script>
 'use strict';
 let CAPTURE_DISABLED=false;
-const APP_VERSION='v2.2';
+const APP_VERSION='v2.3';
 
 /* =========================================================
    Sector definitions
@@ -387,7 +378,7 @@ const SUSTAIN = 'Operating at the leading edge of this area. The work shifts to 
 /* =========================================================
    Questions. Each option maps to levels 1 through 5.
    Wording is identical to the core questions of the detailed
-   maturity assessment, so no per-sector variants.
+   maturity assessment (G3.3 reworded in v2.3), so no per-sector variants.
    ========================================================= */
 const QUESTIONS = [
   { d: 0, stem: 'How do investment decisions connect to corporate goals?',
@@ -430,7 +421,7 @@ const QUESTIONS = [
       'Deferral cost, including growing risk, benefit forgone and the time value of money, is a standard output for every investment.',
       'Optimal timing is calculated across the portfolio and updated as cost, risk and constraint data change.'
     ]},
-  { d: 2, stem: 'How are alternatives and a do-nothing option evaluated for each investment?',
+  { d: 2, stem: 'How are alternatives, such as replace and refurbish, and a do-nothing option evaluated for each investment?',
     opts: [
       'Only the preferred option is presented.',
       'Alternatives are named but not evaluated.',
@@ -508,7 +499,9 @@ const QUESTIONS = [
    State (memory only until submission)
    ========================================================= */
 const state = {
-  sector: null,
+  /* sector comes from the link (&s=), set by the IFS Copperleaf team when the link is minted;
+     without it the results use the generic regulated-infrastructure framing */
+  sector: (k => SECTORS[k] ? k : null)((new URLSearchParams(location.search).get('s') || '').toLowerCase()),
   answers: new Array(QUESTIONS.length).fill(null),
   comments: new Array(QUESTIONS.length).fill(''),
   respondent: null,
@@ -560,26 +553,9 @@ function saveRespondent() {
   }
   err.textContent = '';
   state.respondent = { name: val('rName'), title: val('rTitle'), org: val('rOrg'), unit: val('rUnit'), date: val('rDate') };
-  goToSector();
-}
-
-function goToSector() {
-  const wrap = document.getElementById('sectorOptions');
-  if (!wrap.childElementCount) {
-    Object.keys(SECTORS).forEach(k => {
-      const b = document.createElement('button');
-      b.className = 'option';
-      b.textContent = SECTORS[k].label;
-      b.onclick = () => {
-        state.sector = k;
-        [...wrap.children].forEach(c => c.classList.remove('selected'));
-        b.classList.add('selected');
-        setTimeout(() => { state.qi = 0; renderQuestion(); showScreen('screen-question'); }, 220);
-      };
-      wrap.appendChild(b);
-    });
-  }
-  showScreen('screen-sector');
+  state.qi = 0;
+  renderQuestion();
+  showScreen('screen-question');
 }
 
 function optionText(q, li) {
@@ -600,7 +576,11 @@ function renderQuestion() {
   for (let li = 0; li < 5; li++) {
     const b = document.createElement('button');
     b.className = 'option' + (state.answers[state.qi] === li ? ' selected' : '');
-    b.textContent = optionText(q, li);
+    const tag = document.createElement('span');
+    tag.className = 'lvl';
+    tag.textContent = 'Level ' + (li + 1);
+    b.appendChild(tag);
+    b.appendChild(document.createTextNode(optionText(q, li)));
     b.setAttribute('aria-pressed', state.answers[state.qi] === li ? 'true' : 'false');
     b.onclick = () => {
       state.answers[state.qi] = li;
@@ -635,7 +615,7 @@ function advance() {
 
 function goBack() {
   saveComment();
-  if (state.qi === 0) { showScreen('screen-sector'); return; }
+  if (state.qi === 0) { showScreen('screen-respondent'); return; }
   state.qi--;
   renderQuestion();
 }
@@ -660,7 +640,7 @@ function buildResults() {
   const overallAvg = scores.reduce((a, s) => a + s.avg, 0) / scores.length;
   const overall = Math.max(1, Math.min(5, Math.round(overallAvg)));
   const lvl = LEVELS[overall - 1];
-  const sector = SECTORS[state.sector];
+  const sector = SECTORS[state.sector || 'other'];
 
   document.getElementById('rOverall').textContent = 'Level ' + overall + ' of 5';
   document.getElementById('rLevelName').textContent = lvl.name;
@@ -737,7 +717,7 @@ function submissionPayload(scores, overall) {
     'form-name': 'aip-assessment',
     'bot-field': '',
     token: state.token,
-    sector: state.sector,
+    sector: state.sector || '',
     overall: String(overall),
     domainLevels: scores.map(s => s.domain.key + ':' + s.avg.toFixed(2)).join(','),
     answers: state.answers.map(a => a + 1).join(','),
