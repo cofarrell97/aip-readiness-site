@@ -10,8 +10,13 @@ private repo with its own CLAUDE.md.
     and the `#ver` footer element; bump both on every change.
   - `data/index.html` — title `Data readiness assessment — IFS Copperleaf`. Version in
     `DAPP_VERSION` and `#ver`.
-- `_redirects` — stops this file being served as a web page (the site publishes the repo root).
-  Keep it.
+  - `data-request.html` / `data-request.pdf` — title `Data request — IFS Copperleaf`. The
+    prospect-facing request for sample data, sent after the EO (before the data readiness
+    questions). The PDF is generated from the HTML: edit the HTML, then rebuild with
+    `node tools/build-data-request.js data-request.html data-request.pdf` (setup in the script's
+    header comment) and commit both.
+- `_redirects` — stops this file, `tools/` and `.gitignore` being served (the site publishes the
+  repo root). Keep it.
 
 ## Hard rules
 
@@ -43,12 +48,18 @@ The hidden form and the JavaScript submission payload must list the same field n
   is a question-bank change: bump `APP_VERSION` and update the internal decoder in step.
 - Question bank v2.0 (14 questions, 8 areas = groups G1–G8 of the detailed maturity assessment) is
   word for word the 14 core (◆) questions of the detailed assessment, so the Hub can pre-fill it.
+  Exception: v2.3 reworded Q6 (G3.3) to "How are alternatives, such as replace and refurbish, and a
+  do-nothing option evaluated for each investment?"; the detailed assessment document needs the
+  same wording. Answer options are unchanged. Each option shows its level ("Level 1" … "Level 5").
   Do not reword a question or option, or add per-sector option text, without changing the detailed
   assessment too. `domainLevels` keys: `strategy_value`, `risk_quant`, `inv_governance`,
   `portfolio_mgmt`, `budget_funding`, `plan_defence`, `asset_risk`, `asset_strategy`.
 - Level names (Ad hoc, Emerging, Defined, Integrated, Optimized) match the detailed assessment, on
   both pages.
-- Links arrive as `?p=<token>&o=<owner>`; both values are submitted with the form.
+- Links arrive as `?p=<token>&o=<owner>&s=<sector key>`; all three are submitted with the form.
+  Since v2.3 the prospect is not asked for their sector: it comes from `s` (set by the Hub when the
+  link is minted). Without a valid `s`, `sector` is submitted blank and the results use the
+  generic (`other`) framing.
 
 ## After every deploy, verify
 
