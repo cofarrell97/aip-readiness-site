@@ -125,7 +125,6 @@ h1,h2,h3{letter-spacing:-0.025em}
   <input type="text" name="respondentTitle">
   <input type="text" name="respondentOrg">
   <input type="text" name="respondentUnit">
-  <input type="text" name="respondentEmail">
   <input type="text" name="respondentDate">
   <input type="text" name="comment1">
   <input type="text" name="comment2">
@@ -178,8 +177,6 @@ h1,h2,h3{letter-spacing:-0.025em}
       <input type="text" id="rOrg" maxlength="120" autocomplete="organization" required>
       <label for="rUnit">Business unit or function <span class="opt">(optional)</span></label>
       <input type="text" id="rUnit" maxlength="120">
-      <label for="rEmail">Email</label>
-      <input type="email" id="rEmail" maxlength="160" autocomplete="email" required>
       <label for="rDate">Date</label>
       <input type="date" id="rDate" required>
       <div class="field-err" id="rErr" role="alert"></div>
@@ -242,7 +239,7 @@ h1,h2,h3{letter-spacing:-0.025em}
     <div class="methodology" id="methodology"></div>
     <div class="results-footer">
       <div>IFS Copperleaf readiness assessment</div>
-      <div id="ver">v2.1</div>
+      <div id="ver">v2.2</div>
     </div>
   </div>
 </section>
@@ -250,7 +247,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 <script>
 'use strict';
 let CAPTURE_DISABLED=false;
-const APP_VERSION='v2.1';
+const APP_VERSION='v2.2';
 
 /* =========================================================
    Sector definitions
@@ -546,23 +543,23 @@ function goToRespondent() {
 function clean(v, max) { return String(v || '').replace(/\s+/g, ' ').trim().slice(0, max); }
 
 function saveRespondent() {
-  const val = id => clean(document.getElementById(id).value, id === 'rEmail' ? 160 : 120);
-  const required = ['rName', 'rTitle', 'rOrg', 'rEmail', 'rDate'];
+  const val = id => clean(document.getElementById(id).value, 120);
+  const required = ['rName', 'rTitle', 'rOrg', 'rDate'];
   let firstBad = null;
   required.forEach(id => {
     const el = document.getElementById(id);
-    const bad = !val(id) || (id === 'rEmail' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val(id)));
+    const bad = !val(id);
     el.setAttribute('aria-invalid', bad ? 'true' : 'false');
     if (bad && !firstBad) firstBad = el;
   });
   const err = document.getElementById('rErr');
   if (firstBad) {
-    err.textContent = 'Please complete the highlighted fields' + (firstBad.id === 'rEmail' && val('rEmail') ? ' (the email address looks incomplete).' : '.');
+    err.textContent = 'Please complete the highlighted fields.';
     firstBad.focus();
     return;
   }
   err.textContent = '';
-  state.respondent = { name: val('rName'), title: val('rTitle'), org: val('rOrg'), unit: val('rUnit'), email: val('rEmail'), date: val('rDate') };
+  state.respondent = { name: val('rName'), title: val('rTitle'), org: val('rOrg'), unit: val('rUnit'), date: val('rDate') };
   goToSector();
 }
 
@@ -754,7 +751,6 @@ function submissionPayload(scores, overall) {
   p.set('respondentTitle', r.title || '');
   p.set('respondentOrg', r.org || '');
   p.set('respondentUnit', r.unit || '');
-  p.set('respondentEmail', r.email || '');
   p.set('respondentDate', r.date || '');
   state.comments.forEach((c, i) => p.set('comment' + (i + 1), c));
   return p;

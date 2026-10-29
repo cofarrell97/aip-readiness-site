@@ -26,8 +26,9 @@ private repo with its own CLAUDE.md.
 
 - `aip-assessment` (root page): `bot-field`, `token`, `sector`, `overall`, `domainLevels`,
   `answers`, `startedAt`, `durationSec`, `appVersion`, `owner`, and since v2.0 `respondentName`,
-  `respondentTitle`, `respondentOrg`, `respondentUnit`, `respondentEmail`, `respondentDate`,
-  `comment1` … `comment14`. Comments and respondent fields are collapsed to one line before submit
+  `respondentTitle`, `respondentOrg`, `respondentUnit`, `respondentDate`, `comment1` … `comment14`.
+  `respondentEmail` existed in v2.0–v2.1 only and was removed in v2.2 (we already hold the
+  contact's email; don't collect it again). Comments and respondent fields are collapsed to one line before submit
   (the Hub parses `field: value` lines).
 - `data-assessment` (`/data/`): `bot-field`, `token`, `owner`, `overallData`, `dataDomainLevels`,
   `dataAnswers`, `startedAt`, `durationSec`, `dataAppVersion`.
