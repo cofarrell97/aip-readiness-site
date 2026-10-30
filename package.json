@@ -1,0 +1,8 @@
+{
+  "name": "aip-readiness-site",
+  "private": true,
+  "description": "Client-facing AIP readiness assessment. Dependencies are for the logo function only.",
+  "dependencies": {
+    "@netlify/blobs": "11.1.4"
+  }
+}

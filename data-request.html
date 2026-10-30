@@ -157,26 +157,26 @@ h1,h2,h3{letter-spacing:-0.025em}
 </main>
 <script>
 'use strict';
-/* Personalisation: ?c=<company> sets the name. A logo can only arrive from the IFS Copperleaf
-   Hub, which opens this page and sends it as a PNG data URL, then asks for the print dialog. */
-const COMPANY = (new URLSearchParams(location.search).get('c') || '').replace(/[\u0000-\u001f<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 60);
+/* Personalisation: ?c=<company> sets the name, ?p=<token> loads the pursuit's logo (uploaded
+   by the IFS Copperleaf Hub, served by netlify/functions/logo.js), ?print=1 opens the print
+   dialog once the logo has loaded or turned out not to exist. */
+const params = new URLSearchParams(location.search);
+const COMPANY = (params.get('c') || '').replace(/[\u0000-\u001f<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 60);
 if (COMPANY) {
   document.getElementById('eyebrow').textContent = 'IFS Copperleaf · Data request for ' + COMPANY;
   document.querySelectorAll('.org-name').forEach(e => { e.textContent = COMPANY; });
   document.title = 'Data request for ' + COMPANY + ' — IFS Copperleaf';
 }
-window.addEventListener('message', e => {
-  const m = e.data || {};
-  if (m.type !== 'ifs-data-request') return;
-  const done = () => { if (m.print) setTimeout(() => window.print(), 150); };
-  if (typeof m.logo === 'string' && m.logo.startsWith('data:image/png;base64,') && m.logo.length < 2000000) {
-    const img = document.getElementById('clientLogo');
-    img.onload = () => { document.getElementById('logoBox').hidden = false; done(); };
-    img.onerror = done;
-    img.src = m.logo;
-  } else done();
-});
-if (window.opener) window.opener.postMessage({ type: 'ifs-data-request-ready' }, '*');
+let printed = false;
+const printOnce = () => { if (params.get('print') === '1' && !printed) { printed = true; setTimeout(() => window.print(), 200); } };
+const token = (params.get('p') || '').toLowerCase();
+if (/^[a-z0-9.\-]{3,60}$/.test(token)) {
+  const img = document.getElementById('clientLogo');
+  img.onload = () => { document.getElementById('logoBox').hidden = false; printOnce(); };
+  img.onerror = printOnce;
+  img.src = '/.netlify/functions/logo?t=' + encodeURIComponent(token);
+  setTimeout(printOnce, 4000);
+} else printOnce();
 </script>
 </body>
 </html>
