@@ -33,7 +33,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 .hero p{color:var(--ifs-grey-3);margin-top:15px;font-size:15px;line-height:1.62;max-width:620px}
 .meta{display:flex;gap:34px;margin:26px 0 28px;flex-wrap:wrap}
 .meta div{font-size:13px;color:var(--ifs-grey-3)}
-.meta span{display:block;font-size:24px;font-weight:600;color:#fff}
+.meta span{display:block;font-size:24px;font-weight:600;color:#fff;white-space:nowrap}
 .ifs-btn{background:var(--ifs-blue);color:var(--ifs-midnight);border-radius:999px;padding:13px 30px;font-family:var(--ifs-font);font-weight:600;border:none;cursor:pointer;font-size:15px}
 .ifs-btn:hover{background:#8fd6ff}
 .ifs-btn.purple{background:var(--ifs-purple);color:#fff}
@@ -150,12 +150,12 @@ h1,h2,h3{letter-spacing:-0.025em}
   <div class="shell">
     <div class="hero">
       <div class="eyebrow">IFS Copperleaf</div>
-      <h1>How mature is your organization's <span class="grad">investment decision-making?</span></h1>
-      <p>This assessment helps us understand how investment planning works in your organization today. There are 14 questions and it takes 10 to 15 minutes.</p>
-      <p>For each question, select the statement that best describes what your organization does consistently today, not what the policy says or what you aim for. Use the comment box to add examples or context, including where teams would answer differently.</p>
+      <h1>How mature is <span id="hOrg">your organization’s</span> <span class="grad">investment decision-making?</span></h1>
+      <p>This assessment helps us understand how investment planning works <span class="org-at">in your organization</span> today. There are 14 questions and it takes 10 to 15 minutes.</p>
+      <p>For each question, select the statement that best describes what <span class="org-name">your organization</span> does consistently today, not what the policy says or what you aim for. Use the comment box to add examples or context, including where teams would answer differently.</p>
       <div class="meta">
         <div><span>14</span>questions</div>
-        <div><span>10–15</span>minutes</div>
+        <div><span>10-15</span>minutes</div>
         <div><span>8</span>planning areas</div>
       </div>
       <button class="ifs-btn" onclick="goToRespondent()">Begin the assessment</button>
@@ -224,13 +224,13 @@ h1,h2,h3{letter-spacing:-0.025em}
       </div>
     </div>
     <div class="results-cta noprint">
-      <p>Thank you. We will review your responses and use them as the starting point for our next conversation: what they mean for your organization, and how others in your sector have approached the same gaps.</p>
+      <p>Thank you. We will review your responses and use them as the starting point for our next conversation: what they mean for <span class="org-name">your organization</span>, and how others in your sector have approached the same gaps.</p>
       <button class="ifs-btn" onclick="window.print()">Save as PDF</button>
     </div>
     <div class="methodology" id="methodology"></div>
     <div class="results-footer">
       <div>IFS Copperleaf readiness assessment</div>
-      <div id="ver">v2.3</div>
+      <div id="ver">v2.4</div>
     </div>
   </div>
 </section>
@@ -238,7 +238,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 <script>
 'use strict';
 let CAPTURE_DISABLED=false;
-const APP_VERSION='v2.3';
+const APP_VERSION='v2.4';
 
 /* =========================================================
    Sector definitions
@@ -496,6 +496,35 @@ const QUESTIONS = [
 ];
 
 /* =========================================================
+   Personalisation: the company name comes from the link (&c=),
+   set by the IFS Copperleaf team when the link is minted.
+   QUESTIONS above stays canonical; only the displayed wording
+   changes. {org} = name, {orgs} = possessive.
+   ========================================================= */
+const PSTEMS = {
+  0: 'How do investment decisions at {org} connect to corporate goals?',
+  2: 'Who decides what counts as value in an investment case at {org}?',
+  3: 'How is risk represented in {orgs} investment decisions?',
+  10: 'What is the basis for {orgs} budget today, and how is the budget needed built?',
+  12: 'How are probability and consequence of asset failure established at {org}?',
+  13: 'To what extent is long-term asset sustainment considered in {orgs} planning?'
+};
+const COMPANY = (new URLSearchParams(location.search).get('c') || '').replace(/[\u0000-\u001f<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 60);
+const possessive = n => n + (/s$/i.test(n) ? '’' : '’s');
+function stemFor(qi) {
+  const q = QUESTIONS[qi];
+  if (!COMPANY) return q.stem;
+  const t = PSTEMS[qi] || q.stem.replace(/the organization’s/g, '{orgs}').replace(/the organization/g, '{org}');
+  return t.replace(/\{orgs\}/g, possessive(COMPANY)).replace(/\{org\}/g, COMPANY);
+}
+if (COMPANY) {
+  document.getElementById('hOrg').textContent = possessive(COMPANY);
+  document.querySelectorAll('.org-at').forEach(e => { e.textContent = 'at ' + COMPANY; });
+  document.querySelectorAll('.org-name').forEach(e => { e.textContent = COMPANY; });
+  document.getElementById('rOrg').value = COMPANY;
+}
+
+/* =========================================================
    State (memory only until submission)
    ========================================================= */
 const state = {
@@ -568,7 +597,7 @@ function renderQuestion() {
   const q = QUESTIONS[state.qi];
   document.getElementById('qCount').textContent = 'Question ' + (state.qi + 1) + ' of ' + QUESTIONS.length;
   document.getElementById('qDomain').textContent = DOMAINS[q.d].name;
-  document.getElementById('qStem').textContent = q.stem;
+  document.getElementById('qStem').textContent = stemFor(state.qi);
   document.getElementById('progressBar').style.width = (state.qi / QUESTIONS.length * 100) + '%';
   const wrap = document.getElementById('qOptions');
   const next = document.getElementById('qNext');
