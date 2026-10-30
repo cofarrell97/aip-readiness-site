@@ -14,8 +14,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--ifs-font);background:#fff;color:#232323;letter-spacing:-0.01em;min-height:100vh}
-h1,h2,h3{letter-spacing:-0.025em}
+body{font-family:var(--ifs-font);background:#fff;color:#232323;min-height:100vh}
 .screen{display:none}
 .screen.active{display:block}
 .shell{max-width:780px;margin:0 auto;padding:44px 22px 70px}
@@ -27,10 +26,13 @@ h1,h2,h3{letter-spacing:-0.025em}
 /* landing */
 .hero{background:radial-gradient(ellipse at 80% 20%,#8427E2 0%,transparent 50%),radial-gradient(ellipse at 20% 80%,#360065 0%,#170430 70%);color:#fff;border-radius:16px;padding:42px 40px}
 @media(max-width:560px){.hero{padding:30px 22px}}
-.eyebrow{font-size:12px;letter-spacing:.045em;text-transform:uppercase;font-weight:600;color:var(--ifs-lilac);margin-bottom:14px}
+.eyebrow{font-size:13px;font-weight:600;color:var(--ifs-lilac);margin-bottom:14px}
 .hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 .logo{background:#fff;border-radius:10px;padding:8px 12px;margin:-8px -10px 12px 0;display:flex;align-items:center}
 .logo[hidden]{display:none}
+.screen-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.client-logo{display:block;max-height:36px;max-width:140px;margin-left:auto}
+.client-logo[hidden]{display:none}
 .logo img{display:block;max-height:40px;max-width:150px}
 .hero h1{font-size:clamp(25px,4.4vw,38px);font-weight:600;line-height:1.16}
 .grad{background:linear-gradient(90deg,#8427E2 50%,#CD92FF 75%,#72C9F8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -45,13 +47,13 @@ h1,h2,h3{letter-spacing:-0.025em}
 .hero .privacy{color:rgba(255,255,255,.55)}
 
 /* questions */
-.q-domain{font-size:12px;letter-spacing:.045em;text-transform:uppercase;font-weight:600;color:var(--ifs-purple);margin-bottom:10px}
+.q-domain{font-size:13px;font-weight:600;color:var(--ifs-purple);margin-bottom:10px}
 .q-stem{font-size:clamp(20px,3vw,24px);font-weight:600;color:var(--ifs-dark-purple);margin-bottom:26px;line-height:1.26}
 .pcount{font-size:12.5px;color:var(--ifs-grey-2);margin-bottom:26px}
 .option{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--ifs-grey-3);border-radius:10px;padding:15px 18px;margin-bottom:11px;font-family:var(--ifs-font);font-size:14.5px;line-height:1.55;color:#333;cursor:pointer;transition:border-color .15s,background .15s}
 .option:hover{border-color:var(--ifs-purple)}
 .option.selected{border-color:var(--ifs-purple);background:#f4ebfd}
-.option .lvl{display:block;font-size:11px;letter-spacing:.045em;text-transform:uppercase;font-weight:600;color:var(--ifs-purple);margin-bottom:3px}
+.option .lvl{display:block;font-size:12px;font-weight:600;color:var(--ifs-purple);margin-bottom:3px}
 .resp label,.c-label{display:block;font-size:13px;font-weight:600;color:var(--ifs-dark-purple);margin:16px 0 6px}
 .resp input,.c-box{display:block;width:100%;border:1.5px solid var(--ifs-grey-3);border-radius:10px;padding:12px 14px;font-family:var(--ifs-font);font-size:14.5px;color:#333;background:#fff}
 .resp input:focus,.c-box:focus{outline:none;border-color:var(--ifs-purple)}
@@ -174,7 +176,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 <!-- ============ RESPONDENT ============ -->
 <section class="screen" id="screen-respondent">
   <div class="shell">
-    <div class="q-domain">Before we start</div>
+    <div class="screen-top"><div class="q-domain">Before we start</div><img class="client-logo" alt="" hidden></div>
     <h2 class="q-stem">About you</h2>
     <form id="respForm" class="resp" onsubmit="event.preventDefault(); saveRespondent();" novalidate>
       <label for="rName">Full name</label>
@@ -197,7 +199,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 <!-- ============ QUESTION ============ -->
 <section class="screen" id="screen-question">
   <div class="shell">
-    <div class="pcount" id="qCount"></div>
+    <div class="screen-top"><div class="pcount" id="qCount"></div><img class="client-logo" alt="" hidden></div>
     <div class="q-domain" id="qDomain"></div>
     <h2 class="q-stem" id="qStem"></h2>
     <div id="qOptions"></div>
@@ -214,7 +216,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 <section class="screen" id="screen-results">
   <div class="results-shell">
     <div class="results-hero">
-      <div class="eyebrow">Your readiness result</div>
+      <div class="screen-top"><div class="eyebrow">Your readiness result</div><img class="client-logo" alt="" hidden></div>
       <h1 id="rOverall"></h1>
       <div class="level-name" id="rLevelName"></div>
       <p id="rLevelDesc"></p>
@@ -237,7 +239,7 @@ h1,h2,h3{letter-spacing:-0.025em}
     <div class="methodology" id="methodology"></div>
     <div class="results-footer">
       <div>IFS Copperleaf readiness assessment</div>
-      <div id="ver">v2.5</div>
+      <div id="ver">v2.6</div>
     </div>
   </div>
 </section>
@@ -245,7 +247,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 <script>
 'use strict';
 let CAPTURE_DISABLED=false;
-const APP_VERSION='v2.5';
+const APP_VERSION='v2.6';
 
 /* =========================================================
    Sector definitions
@@ -528,9 +530,14 @@ function stemFor(qi) {
 (function () {
   const t = (new URLSearchParams(location.search).get('p') || '').toLowerCase();
   if (!/^[a-z0-9.\-]{3,60}$/.test(t)) return;
+  const src = '/.netlify/functions/logo?t=' + encodeURIComponent(t);
   const img = document.getElementById('clientLogo');
-  img.onload = () => { document.getElementById('logoBox').hidden = false; };
-  img.src = '/.netlify/functions/logo?t=' + encodeURIComponent(t);
+  /* intro: in the white tile on the dark hero; every other screen: top right */
+  img.onload = () => {
+    document.getElementById('logoBox').hidden = false;
+    document.querySelectorAll('.client-logo').forEach(i => { i.src = src; i.hidden = false; });
+  };
+  img.src = src;
 })();
 if (COMPANY) {
   document.getElementById('hOrg').textContent = possessive(COMPANY);
