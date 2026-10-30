@@ -13,8 +13,7 @@
   --ifs-font:'Euclid Circular A','Century Gothic',sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:var(--ifs-font);background:#fff;color:#232323;letter-spacing:-0.01em;min-height:100vh}
-h1,h2,h3{letter-spacing:-0.025em}
+body{font-family:var(--ifs-font);background:#fff;color:#232323;min-height:100vh}
 .screen{display:none}
 .screen.active{display:block}
 .shell{max-width:780px;margin:0 auto;padding:44px 22px 70px}
@@ -22,7 +21,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 .progress-bar{height:100%;width:0;background:var(--ifs-purple);transition:width .25s}
 .hero{background:radial-gradient(ellipse at 80% 20%,#8427E2 0%,transparent 50%),radial-gradient(ellipse at 20% 80%,#360065 0%,#170430 70%);color:#fff;border-radius:16px;padding:42px 40px}
 @media(max-width:560px){.hero{padding:30px 22px}}
-.eyebrow{font-size:12px;letter-spacing:.045em;text-transform:uppercase;font-weight:600;color:var(--ifs-lilac);margin-bottom:14px}
+.eyebrow{font-size:13px;font-weight:600;color:var(--ifs-lilac);margin-bottom:14px}
 .hero h1{font-size:clamp(25px,4.4vw,38px);font-weight:600;line-height:1.16}
 .grad{background:linear-gradient(90deg,#8427E2 50%,#CD92FF 75%,#72C9F8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{color:var(--ifs-grey-3);margin-top:15px;font-size:15px;line-height:1.62;max-width:620px}
@@ -32,7 +31,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 .ifs-btn{background:var(--ifs-blue);color:var(--ifs-midnight);border-radius:999px;padding:13px 30px;font-family:var(--ifs-font);font-weight:600;border:none;cursor:pointer;font-size:15px}
 .ifs-btn:hover{background:#8fd6ff}
 .privacy{font-size:11.5px;color:rgba(255,255,255,.55);margin-top:20px;line-height:1.5;max-width:620px}
-.q-domain{font-size:12px;letter-spacing:.045em;text-transform:uppercase;font-weight:600;color:var(--ifs-purple);margin-bottom:10px}
+.q-domain{font-size:13px;font-weight:600;color:var(--ifs-purple);margin-bottom:10px}
 .q-stem{font-size:clamp(20px,3vw,24px);font-weight:600;color:var(--ifs-dark-purple);margin-bottom:26px;line-height:1.26}
 .pcount{font-size:12.5px;color:var(--ifs-grey-2);margin-bottom:26px}
 .option{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--ifs-grey-3);border-radius:10px;padding:15px 18px;margin-bottom:11px;font-family:var(--ifs-font);font-size:14.5px;line-height:1.55;color:#333;cursor:pointer;transition:border-color .15s,background .15s}
@@ -131,7 +130,7 @@ h1,h2,h3{letter-spacing:-0.025em}
     <p class="methodology">Methodology. This screen extends the AIP readiness assessment into the data domain, anchored to ISO 55013 guidance on the management of data assets in support of ISO 55001. It is an indicative self-assessment based on self-reported behaviours, not a data audit, and results should be read as a starting point for discussion.</p>
     <div class="results-footer">
       <div>IFS Copperleaf data readiness assessment</div>
-      <div id="ver">d1.1</div>
+      <div id="ver">d1.2</div>
     </div>
   </div>
 </section>
@@ -139,7 +138,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 <script>
 'use strict';
 let CAPTURE_DISABLED = false;
-const DAPP_VERSION = 'd1.1';
+const DAPP_VERSION = 'd1.2';
 
 const LEVELS = [
   { n: 1, name: 'Ad hoc' },
