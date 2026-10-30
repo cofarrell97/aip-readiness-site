@@ -14,11 +14,18 @@ private repo with its own CLAUDE.md.
     prospect-facing request for sample data, sent after the EO (before the data readiness
     questions). The PDF is generated from the HTML: edit the HTML, then rebuild with
     `node tools/build-data-request.js data-request.html data-request.pdf` (setup in the script's
-    header comment) and commit both. `?c=<company>` personalises the page. A logo can only arrive
-    from the Hub, which opens the page, sends the PNG by `postMessage` and asks for the print
-    dialog; the committed PDF stays generic.
-- `_redirects` — stops this file, `tools/` and `.gitignore` being served (the site publishes the
-  repo root). Keep it.
+    header comment) and commit both. `?c=<company>` personalises the page, `?p=<token>` loads the
+    pursuit's logo, `?print=1` opens the print dialog once the logo is in. The committed PDF stays
+    generic.
+- `netlify/functions/logo.js` — `GET /.netlify/functions/logo?t=<token>` serves a pursuit's logo
+  (PNG) from this site's `logos` blob store, or 404. The Hub writes the store (team-key protected,
+  through the Netlify API); nothing on this site can write it. Both pages show the logo when the
+  link's `p` has one. `package.json` pins `@netlify/blobs` for this function; `netlify.toml` sets
+  `publish = "."` and the functions folder.
+- `_redirects` — stops this file, `tools/`, `.gitignore`, `netlify.toml`, `netlify/` and the
+  package files being served (the site publishes the repo root). Keep it.
+- Never commit test output (screenshots etc.). Two test screenshots slipped into v2.2 and were
+  removed in v2.5; they contained only made-up test data.
 
 ## Hard rules
 

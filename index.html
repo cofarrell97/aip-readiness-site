@@ -28,6 +28,10 @@ h1,h2,h3{letter-spacing:-0.025em}
 .hero{background:radial-gradient(ellipse at 80% 20%,#8427E2 0%,transparent 50%),radial-gradient(ellipse at 20% 80%,#360065 0%,#170430 70%);color:#fff;border-radius:16px;padding:42px 40px}
 @media(max-width:560px){.hero{padding:30px 22px}}
 .eyebrow{font-size:12px;letter-spacing:.045em;text-transform:uppercase;font-weight:600;color:var(--ifs-lilac);margin-bottom:14px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.logo{background:#fff;border-radius:10px;padding:8px 12px;margin:-8px -10px 12px 0;display:flex;align-items:center}
+.logo[hidden]{display:none}
+.logo img{display:block;max-height:40px;max-width:150px}
 .hero h1{font-size:clamp(25px,4.4vw,38px);font-weight:600;line-height:1.16}
 .grad{background:linear-gradient(90deg,#8427E2 50%,#CD92FF 75%,#72C9F8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{color:var(--ifs-grey-3);margin-top:15px;font-size:15px;line-height:1.62;max-width:620px}
@@ -149,7 +153,10 @@ h1,h2,h3{letter-spacing:-0.025em}
 <section class="screen active" id="screen-landing">
   <div class="shell">
     <div class="hero">
-      <div class="eyebrow">IFS Copperleaf</div>
+      <div class="hero-top">
+        <div class="eyebrow">IFS Copperleaf</div>
+        <div class="logo" id="logoBox" hidden><img id="clientLogo" alt=""></div>
+      </div>
       <h1>How mature is <span id="hOrg">your organization’s</span> <span class="grad">investment decision-making?</span></h1>
       <p>This assessment helps us understand how investment planning works <span class="org-at">in your organization</span> today. There are 14 questions and it takes 10 to 15 minutes.</p>
       <p>For each question, select the statement that best describes what <span class="org-name">your organization</span> does consistently today, not what the policy says or what you aim for. Use the comment box to add examples or context, including where teams would answer differently.</p>
@@ -230,7 +237,7 @@ h1,h2,h3{letter-spacing:-0.025em}
     <div class="methodology" id="methodology"></div>
     <div class="results-footer">
       <div>IFS Copperleaf readiness assessment</div>
-      <div id="ver">v2.4</div>
+      <div id="ver">v2.5</div>
     </div>
   </div>
 </section>
@@ -238,7 +245,7 @@ h1,h2,h3{letter-spacing:-0.025em}
 <script>
 'use strict';
 let CAPTURE_DISABLED=false;
-const APP_VERSION='v2.4';
+const APP_VERSION='v2.5';
 
 /* =========================================================
    Sector definitions
@@ -517,6 +524,14 @@ function stemFor(qi) {
   const t = PSTEMS[qi] || q.stem.replace(/the organization’s/g, '{orgs}').replace(/the organization/g, '{org}');
   return t.replace(/\{orgs\}/g, possessive(COMPANY)).replace(/\{org\}/g, COMPANY);
 }
+/* the pursuit's logo, if the Hub uploaded one (served by netlify/functions/logo.js) */
+(function () {
+  const t = (new URLSearchParams(location.search).get('p') || '').toLowerCase();
+  if (!/^[a-z0-9.\-]{3,60}$/.test(t)) return;
+  const img = document.getElementById('clientLogo');
+  img.onload = () => { document.getElementById('logoBox').hidden = false; };
+  img.src = '/.netlify/functions/logo?t=' + encodeURIComponent(t);
+})();
 if (COMPANY) {
   document.getElementById('hOrg').textContent = possessive(COMPANY);
   document.querySelectorAll('.org-at').forEach(e => { e.textContent = 'at ' + COMPANY; });
