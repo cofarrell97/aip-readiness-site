@@ -19,6 +19,10 @@ h1,h2,h3{letter-spacing:-0.025em}
 
 .hero{background:radial-gradient(ellipse at 85% 15%,#8427E2 0%,transparent 55%),radial-gradient(ellipse at 15% 85%,#360065 0%,#170430 70%);color:#fff;border-radius:16px;padding:34px 36px}
 .eyebrow{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--ifs-lilac);margin-bottom:12px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.logo{background:#fff;border-radius:10px;padding:8px 12px;margin:-6px -8px 10px 0;display:flex;align-items:center}
+.logo[hidden]{display:none}
+.logo img{display:block;max-height:40px;max-width:150px}
 .hero h1{font-size:clamp(25px,4.6vw,34px);font-weight:600;line-height:1.15}
 .grad{background:linear-gradient(90deg,#CD92FF 0%,#72C9F8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{color:var(--ifs-grey-3);margin-top:14px;font-size:14.5px;line-height:1.6;max-width:600px}
@@ -68,9 +72,12 @@ h1,h2,h3{letter-spacing:-0.025em}
 <body>
 <main class="page">
   <header class="hero">
-    <div class="eyebrow">IFS Copperleaf · Data request</div>
+    <div class="hero-top">
+      <div class="eyebrow" id="eyebrow">IFS Copperleaf · Data request</div>
+      <div class="logo" id="logoBox" hidden><img id="clientLogo" alt=""></div>
+    </div>
     <h1>Bringing your <span class="grad">own data</span> to the next session</h1>
-    <p>To make the next session about your organization rather than a generic demonstration, we would like to work from a small sample of what you already use to plan investment. Four things help most. Send whatever exists today; partial is fine.</p>
+    <p>To make the next session about <span class="org-name">your organization</span> rather than a generic demonstration, we would like to work from a small sample of what you already use to plan investment. Four things help most. Send whatever exists today; partial is fine.</p>
   </header>
 
   <section class="principles" aria-label="Before you start">
@@ -148,5 +155,28 @@ h1,h2,h3{letter-spacing:-0.025em}
 
   <div class="foot"><span>IFS Copperleaf · Asset Investment Planning</span><span>Data request</span></div>
 </main>
+<script>
+'use strict';
+/* Personalisation: ?c=<company> sets the name. A logo can only arrive from the IFS Copperleaf
+   Hub, which opens this page and sends it as a PNG data URL, then asks for the print dialog. */
+const COMPANY = (new URLSearchParams(location.search).get('c') || '').replace(/[\u0000-\u001f<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 60);
+if (COMPANY) {
+  document.getElementById('eyebrow').textContent = 'IFS Copperleaf · Data request for ' + COMPANY;
+  document.querySelectorAll('.org-name').forEach(e => { e.textContent = COMPANY; });
+  document.title = 'Data request for ' + COMPANY + ' — IFS Copperleaf';
+}
+window.addEventListener('message', e => {
+  const m = e.data || {};
+  if (m.type !== 'ifs-data-request') return;
+  const done = () => { if (m.print) setTimeout(() => window.print(), 150); };
+  if (typeof m.logo === 'string' && m.logo.startsWith('data:image/png;base64,') && m.logo.length < 2000000) {
+    const img = document.getElementById('clientLogo');
+    img.onload = () => { document.getElementById('logoBox').hidden = false; done(); };
+    img.onerror = done;
+    img.src = m.logo;
+  } else done();
+});
+if (window.opener) window.opener.postMessage({ type: 'ifs-data-request-ready' }, '*');
+</script>
 </body>
 </html>

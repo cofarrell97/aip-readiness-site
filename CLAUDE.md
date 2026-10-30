@@ -14,7 +14,9 @@ private repo with its own CLAUDE.md.
     prospect-facing request for sample data, sent after the EO (before the data readiness
     questions). The PDF is generated from the HTML: edit the HTML, then rebuild with
     `node tools/build-data-request.js data-request.html data-request.pdf` (setup in the script's
-    header comment) and commit both.
+    header comment) and commit both. `?c=<company>` personalises the page. A logo can only arrive
+    from the Hub, which opens the page, sends the PNG by `postMessage` and asks for the print
+    dialog; the committed PDF stays generic.
 - `_redirects` — stops this file, `tools/` and `.gitignore` being served (the site publishes the
   repo root). Keep it.
 
@@ -56,7 +58,10 @@ The hidden form and the JavaScript submission payload must list the same field n
   `portfolio_mgmt`, `budget_funding`, `plan_defence`, `asset_risk`, `asset_strategy`.
 - Level names (Ad hoc, Emerging, Defined, Integrated, Optimized) match the detailed assessment, on
   both pages.
-- Links arrive as `?p=<token>&o=<owner>&s=<sector key>`; all three are submitted with the form.
+- Links arrive as `?p=<token>&o=<owner>&s=<sector key>&c=<company name>`; `p`, `o` and `s` are
+  submitted with the form. `c` (since v2.4) only personalises the page: headline, intro, the
+  question wording (`PSTEMS`, or "the organization" swapped for the name) and the pre-filled
+  Organization field. `QUESTIONS` itself stays canonical, so decoding is unaffected.
   Since v2.3 the prospect is not asked for their sector: it comes from `s` (set by the Hub when the
   link is minted). Without a valid `s`, `sector` is submitted blank and the results use the
   generic (`other`) framing.
